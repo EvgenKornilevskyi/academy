@@ -39,14 +39,17 @@
 ## Задание 1. Написать два теста проверяющие POST запрос.
 Добавить эти тесты в класс Task1. 
 Тесты будут проверять POST запрос на ендпоинт http://jsonplaceholder.typicode.com/posts.
+
 Метод их выполнения должен быnь общий, но разные данные должны прокидываться через IEnumerable в TestCaseSource.
 Oбъект для отправки запроса уже создан в проект Сommon -> Configuration -> Domain -> PostsRequest. 
 
-Для первого теста:
+- **Для первого теста:**
+
 Оправить методом POST новый объект PostsRequest в котором Id и UserId будут рандомные уникальные числа, Body и  Title будут Guid + Test 1. 
 Далее должна быть проверка, что респонс StatusCode равен Code 201 (Created)
 
-Для второго теста:
+- **Для второго теста:**
+
 Оправить методом POST новый объект PostsRequest существующий в котором Id и UserId равны 1, Body и Title будут Guid + Test 2.
 Далее должна быть проверка, что респонс StatusCode равен Code 400 (BadRequest).
 Тест будет падать на Assert, это нормально.
@@ -57,15 +60,18 @@ Oбъект для отправки запроса уже создан в про
 ## Задание 2. Написать два теста проверяющие комментарии.
 Добавить эти тесты в класс Task2. 
 Тесты будут проверять GET запрос на ендпоинт https://jsonplaceholder.typicode.com/comments
+
 Метод их выполнения должен быть общий, но разные данные должны прокидывается через IEnumerable в TestCaseSource.
 Oбъект для десириализации респонса уже создан объект в проект Сommon -> Configuration -> Domain -> CommentsResponce. 
 
-Для первого теста:
+- **Для первого теста:**
+
 Нужно по-данному ендпоинту достать комментарий с айди 5, тоесть сделать GET запрос на "comments/5". 
 Далее проверить, что что респонс StatusCode равен Code 200 (OK)
 Далее десириализировать контент с респонса в объект CommentsResponce.
 И сделать проверку по каждому полю. Все ассерты должны быть объеденины в Assert.Multiple. 
 Полученный должен соответствовать данному.
+
 {
   "postId": 1,
   "id": 5,
@@ -74,12 +80,14 @@ Oбъект для десириализации респонса уже созд
   "body": "harum non quasi et ratione\ntempore iure ex voluptates in ratione\nharum architecto fugit inventore cupiditate\nvoluptates magni quo et"
 }
 
-Для второго теста: 
+- **Для второго теста:** 
+
 Нужно по-данному ендпоинту достать комментарий от пользователя с имейлом Lew@alysha.tv, тоесть сделать GET запрос на "?email=Lew@alysha.tv".
 Далее проверить, что респонс StatusCode равен Code 200 (OK)
 Далее десириализировать контент с респонса в объект CommentsResponce.
 И сделать проверку по каждому полю. Все ассерты должны быть объеденины в Assert.Multiple. 
 Полученный должен соответствовать данному.
+
 {
   "postId": 1,
   "id": 1,
@@ -87,13 +95,16 @@ Oбъект для десириализации респонса уже созд
   "email": "Lew@alysha.tv",
   "body": "non et atque\noccaecati deserunt quas accusantium unde odit nobis qui voluptatem\nquia voluptas consequuntur itaque dolor\net qui rerum deleniti ut occaecati"
 }
+
 Тест будет падать на Assert, это нормально.
 
 ## Задание 3. Написать тест проверяющий данные по ендпоинту todos.
 Добавить эти тесты в класс Task3. 
 Тесты будут проверять GET запрос на ендпоинт https://jsonplaceholder.typicode.com/todos
-Метод их выполнения должен быть общий, но разные данные должны прокидыватся через IEnumerable в TestCaseSource.
+
+Данные должны прокидыватся через IEnumerable в TestCaseSource.
 Oбъект для десириализации респонса это List<TodosResponce>. 
+
 Из всего респонса нужно достать только первых 3 елемента c коллекции. 
 Ожидаемый объект для сравнения возвращает метод CreateExpectedTodosResponse.
 Сравнивать объекты нужно через CollectionAssert.AreEqual. 
