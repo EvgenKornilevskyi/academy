@@ -2,6 +2,6 @@
 {
     public class Meta
     {
-        public Pagination pagination { get; set; }
+        public Pagination Pagination { get; set; }
     }
 }
