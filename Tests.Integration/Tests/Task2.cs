@@ -1,25 +1,22 @@
-using Newtonsoft.Json;
 using NUnit.Framework;
-using ResultsManager.Tests.Common.Configuration.Services.Http;
-using ResultsManager.Tests.Common.Helpers;
 using System.Collections;
-using System.Net;
-using Tests.Common.Configuration;
-using Tests.Common.Configuration.Domain;
 using Tests.Common.Configuration.TestData;
 
 namespace Tests.Integration.Tests
 {
+    [TestFixture]
     public class Task2 : TestBase
     {
+        [Test]
         [TestCaseSource(typeof(TestDataSource2), nameof(TestDataSource2.GetRequestData))]
         public async Task HwTask2(TestData testData)
         {
-
             //var responce = await TestServices.HttpClientFactory
-            //     .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Comments);
+            //     .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + Endpoints.UserId(3307) +
+            //     Endpoints.AccessToken + TestServices.AuthorizationToken);
             //var responceContent = await responce.Content.ReadAsStringAsync();
-            //var responceComments = JsonConvert.DeserializeObject<CommentsResponce>(responceContent);
+            //var responceUserResponse = JsonConvert.DeserializeObject<UserSingleResponse>(responceContent);
+            //var user = responceUserResponse.User;
 
             //Assert place
         }
@@ -33,10 +30,16 @@ namespace Tests.Integration.Tests
                 {
                     var data = new TestData();
 
-                    data.CommentsResponce["CommentsResponce"] = new CommentsResponce();
+                    //data.User["User"] = new User();
+
+                    //data.User["User"].Id = 1;
+                    //data.User["User"].Name = "Eugen";
+                    //data.User["User"].Email = "EugenSuper@mail.com";
+                    //data.User["User"].Gender = "male";
+                    //data.User["User"].Status = "active";
 
                     yield return new TestCaseData(data)
-                        .SetArgDisplayNames("PostsRequest");
+                        .SetArgDisplayNames("User");
                 }
             }
         }

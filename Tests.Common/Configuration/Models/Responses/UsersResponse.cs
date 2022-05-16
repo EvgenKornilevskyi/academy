@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using Tests.Common.Configuration.Models.Responses;
 
 namespace Tests.Common.Configuration.Models

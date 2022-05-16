@@ -10,22 +10,25 @@ namespace Tests.Common.Configuration
     {
         private static ServiceProvider ServiceProvider { get; set; }
         public static HttpClientFactory HttpClientFactory { get; set; }
+        public static string AuthorizationToken { get; private set; }
 
         public static string NewId => Guid.NewGuid().ToString();
         public static int Rand => new Random(Environment.TickCount).Next(int.MaxValue);
-        
+
         static TestServices() => ConfigureServices();
-        
+
         private static void ConfigureServices()
         {
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
+            AuthorizationToken = configuration["AuthorizationToken"];
+
             ServiceProvider = GetServiceProvider(configuration);
             HttpClientFactory = ServiceProvider.GetService<HttpClientFactory>();
         }
-        
+
         private static ServiceProvider GetServiceProvider(IConfiguration configuration)
         {
             var services = new ServiceCollection();
