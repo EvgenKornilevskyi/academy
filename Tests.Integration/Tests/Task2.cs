@@ -1,5 +1,10 @@
+using Newtonsoft.Json;
 using NUnit.Framework;
+using ResultsManager.Tests.Common.Configuration.Services.Http;
+using ResultsManager.Tests.Common.Helpers;
 using System.Collections;
+using Tests.Common.Configuration;
+using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.TestData;
 
 namespace Tests.Integration.Tests
@@ -11,12 +16,12 @@ namespace Tests.Integration.Tests
         [TestCaseSource(typeof(TestDataSource2), nameof(TestDataSource2.GetRequestData))]
         public async Task HwTask2(TestData testData)
         {
-            //var responce = await TestServices.HttpClientFactory
-            //     .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + Endpoints.UserId(3307) +
-            //     Endpoints.AccessToken + TestServices.AuthorizationToken);
-            //var responceContent = await responce.Content.ReadAsStringAsync();
-            //var responceUserResponse = JsonConvert.DeserializeObject<UserSingleResponse>(responceContent);
-            //var user = responceUserResponse.User;
+            var responce = await TestServices.HttpClientFactory
+                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + "/9070" +
+                 Endpoints.AccessToken);
+            var responceContent = await responce.Content.ReadAsStringAsync();
+            var responceUserResponse = JsonConvert.DeserializeObject<UserSingleResponse>(responceContent);
+            var user = responceUserResponse.User;
 
             //Assert place
         }

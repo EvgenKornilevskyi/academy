@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using ResultsManager.Tests.Common.Configuration.Services.Http;
 using Tests.Common.Configuration;
+using Tests.Common.Configuration.Helpers;
 
 namespace Tests.Integration
 {
@@ -8,17 +9,33 @@ namespace Tests.Integration
     [Parallelizable(ParallelScope.All)]
     public class TestBase
     {
-        protected HttpClient HttpClient;
         [SetUp]
         public void Init()
         {
-            HttpClient = TestServices.HttpClientFactory
-                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder);
+            
         }
 
         [TearDown] 
         public void Cleanup()
         {
+            string name = TestContext.CurrentContext.Test.FullName.ToString();
+            string result = TestContext.CurrentContext.Result.Outcome.ToString();
+            var collector = TestResultCollector.getInstance();
+            collector.AddResult(name, result);
+        }
+    }
+    [SetUpFixture]
+    public class Assembly
+    {
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+        }
+        [OneTimeTearDown]
+        public void OneTimeTeatDown()
+        {
+            var collector = TestResultCollector.getInstance();
+            collector.SaveResults();
         }
     }
 }
