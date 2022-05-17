@@ -35,8 +35,8 @@ namespace Tests.Integration.Tests
                 data.PostRequest["PostsRequest"] = new User();
 
                 data.PostRequest["PostsRequest"].Id = TestServices.Rand;
-                data.PostRequest["PostsRequest"].Name = "someName";
-                data.PostRequest["PostsRequest"].Email = "someEmail@mail.com";
+                data.PostRequest["PostsRequest"].Name = "Oleg";
+                data.PostRequest["PostsRequest"].Email = "Oleg@mail.com";
                 data.PostRequest["PostsRequest"].Gender = "male";
                 data.PostRequest["PostsRequest"].Status = "active";
 

@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using NUnit.Framework;
+using ResultsManager.Tests.Common.Configuration.Services.Http;
 using ResultsManager.Tests.Common.Helpers;
 using System.Collections;
 using Tests.Common.Configuration;
@@ -13,11 +14,14 @@ namespace Tests.Integration.Tests
     [TestFixture]
     public class PagintaionTests : TestBase
     {
+        [Test]
+        [Category("Pagination")]
         [TestCaseSource(typeof(PaginationTestData), nameof(PaginationTestData.GetAllPagination))]
-        public async Task Get_EntitiesByPage_ReturnsExpectedPageNumber(string endpoint, int expectedPage)
+        public async Task Get_EntitiesByPage_ReturnsExpectedPageNumber(string endpoint, int page)
         {
-            ////Arrange
-            //var response = await HttpClient.Get(endpoint + $"?page={expectedPage}");
+            //Arrange
+            //var response = await TestServices.HttpClientFactory.SendHttpRequestTo(HttpApisNames.Jsonplaceholder)
+            //    .Get(endpoint + $"?page={expectedPage}");
             //var responseBody = await response.Content.ReadAsStringAsync();
             //var entities = JsonConvert.DeserializeObject<BaseResponse>(responseBody);
 
@@ -26,6 +30,7 @@ namespace Tests.Integration.Tests
 
             ////Assert
             //Assert.AreEqual(expectedPage, actualPage);
+            // dotnet test --filter TestCategory=Pagination
         }
 
         [TestCaseSource(typeof(PaginationTestData), nameof(PaginationTestData.GetPostsPagination))]
@@ -75,5 +80,23 @@ namespace Tests.Integration.Tests
             ////Assert
             //Assert.AreEqual(expectedUsersCount, actualLimit);
         }
+
+        //internal static class TestDataSource
+        //{
+        //    internal static IEnumerable ReturnsUserById
+        //    {
+        //        get
+        //        {
+        //            var data = new TestData();
+
+        //            data.Pagination["Pagination"] = ;
+
+                    
+
+        //            yield return new TestCaseData(data)
+        //                .SetArgDisplayNames("ReturnsUserById");
+        //        }
+        //    }
+        //}
     }
 }
