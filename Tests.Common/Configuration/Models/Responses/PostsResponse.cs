@@ -5,7 +5,6 @@ namespace Tests.Common.Configuration.Models
 {
     public class PostsResponse : BaseResponse
     {
-        //public Meta? Meta { get; set; }
         [JsonProperty("data")]
         public List<Post>? Posts { get; set; }
     }

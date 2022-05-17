@@ -2,7 +2,8 @@ namespace Tests.Common.Configuration
 {
     public static class Endpoints
     {
-        private const string _basePath = "public/v1/";
+        private const string _basePath = "public/v1";
+
         public const string Users = _basePath + "/users";
         public const string AccessToken = "?access-token=";
         public const string Posts = _basePath + "/posts";
