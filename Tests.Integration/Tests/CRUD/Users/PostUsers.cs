@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json;
+using NUnit.Framework;
 using ResultsManager.Tests.Common.Configuration.Services.Http;
 using ResultsManager.Tests.Common.Helpers;
 using System.Collections;
@@ -11,33 +12,41 @@ namespace Tests.Integration.Tests.Users
 {
     public class PostUsers : TestBase
     {
+        [Test]
         [Category("Post")]
-        [TestCaseSource(typeof(TestDataSource), nameof(TestDataSource.PostsRequestReturnsStatusCodeCreated))]
-        public async Task PostsRequest_SendPostRequest_ExpectedStatusCodeReturned(TestData testData)
+        [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeCreated))]
+        public async Task PostRequest_PostUser_ExpectedStatusCodeReturned(TestData testData)
         {
             var response = await TestServices.HttpClientFactory
-                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Users + Endpoints.AccessToken, testData.PostRequest["PostsRequest"]);
+                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Users + Endpoints.AccessToken,
+                testData.UserRequest["PostRequest"]);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseUserId = JsonConvert.DeserializeObject<UserSingleResponse>(responseContent).User.Id;
 
             Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
-                $"Actual StatusCode isnt equal to expected. {Endpoints.Posts}");
+                $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
+
+            await TestServices.HttpClientFactory
+                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Delete(Endpoints.Users + Endpoints.UserId(responseUserId)
+                + Endpoints.AccessToken);
         }
     }
 
-    internal static class TestDataSource
+    internal static class TestDataSourcePost
     {
-        internal static IEnumerable PostsRequestReturnsStatusCodeCreated
+        internal static IEnumerable PostRequestReturnsStatusCodeCreated
         {
             get
             {
                 var data = new TestData();
 
-                data.PostRequest["PostsRequest"] = new User();
+                data.UserRequest["PostRequest"] = new User();
 
-                data.PostRequest["PostsRequest"].Id = TestServices.Rand;
-                data.PostRequest["PostsRequest"].Name = "Oleg";
-                data.PostRequest["PostsRequest"].Email = "Oleg@mail.com";
-                data.PostRequest["PostsRequest"].Gender = "male";
-                data.PostRequest["PostsRequest"].Status = "active";
+                data.UserRequest["PostRequest"].Id = TestServices.Rand;
+                data.UserRequest["PostRequest"].Name = TestServices.NewId.ToString();
+                data.UserRequest["PostRequest"].Email = TestServices.NewId.ToString() + "@mail.com";
+                data.UserRequest["PostRequest"].Gender = "male";
+                data.UserRequest["PostRequest"].Status = "active";
 
                 data.StatusCode["StatusCode"] = HttpStatusCode.Created;
 

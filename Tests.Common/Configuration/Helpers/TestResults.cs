@@ -6,8 +6,6 @@ namespace ResultsManager.Tests.Common.Configuration.Helpers
 {
     public class TestResultCollector
     {
-        //private static TestResultCollector instance;
-        //private static object locker = new object();
         private static readonly string dateTime = DateTime.Now.ToString().Replace(":", ".");
         private static readonly string path = Directory.GetCurrentDirectory() + $"\\TestResults-{dateTime}.json";
 
@@ -37,21 +35,6 @@ namespace ResultsManager.Tests.Common.Configuration.Helpers
                 sw.Write(resultsJson);
             }
         }
-
-        //public static TestResultCollector getInstance()
-        //{
-        //    if(instance == null)
-        //    {
-        //        lock(locker)
-        //        {
-        //            if(instance == null)
-        //            {
-        //                instance = new TestResultCollector();
-        //            }
-        //        }
-        //    }
-        //    return instance;
-        //}
     }
 }
 
