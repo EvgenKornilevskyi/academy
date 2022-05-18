@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using ResultsManager.Tests.Common.Configuration.Services.Http;
 using Tests.Common.Configuration;
-using Tests.Common.Configuration.Helpers;
 
 namespace Tests.Integration
 {
@@ -18,10 +17,9 @@ namespace Tests.Integration
         [TearDown] 
         public void Cleanup()
         {
-            string name = TestContext.CurrentContext.Test.FullName.ToString();
+            string name = TestContext.CurrentContext.Test.Name.ToString();
             string result = TestContext.CurrentContext.Result.Outcome.ToString();
-            var collector = TestResultCollector.getInstance();
-            collector.AddResult(name, result);
+            TestServices.TestResultCollector.AddResult(name, result);
         }
     }
     [SetUpFixture]
@@ -35,8 +33,7 @@ namespace Tests.Integration
         [OneTimeTearDown]
         public void OneTimeTeatDown()
         {
-            var collector = TestResultCollector.getInstance();
-            collector.SaveResults();
+            TestServices.TestResultCollector.SaveResults();
         }
     }
 }

@@ -7,11 +7,10 @@ using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.TestData;
 
-namespace Tests.Integration.Tests
+namespace Tests.Integration.Tests.Users
 {
     public class PostUsers : TestBase
     {
-        [Test]
         [Category("Post")]
         [TestCaseSource(typeof(TestDataSource), nameof(TestDataSource.PostsRequestReturnsStatusCodeCreated))]
         public async Task PostsRequest_SendPostRequest_ExpectedStatusCodeReturned(TestData testData)

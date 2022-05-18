@@ -8,7 +8,7 @@ using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.TestData;
 
-namespace Tests.Integration.Tests
+namespace Tests.Integration.Tests.Users
 {
     public class GetUsers : TestBase
     {

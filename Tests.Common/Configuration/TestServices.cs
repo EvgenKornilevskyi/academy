@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ResultsManager.Tests.Common.Configuration.Options;
 using ResultsManager.Tests.Common.Configuration.Services.Http;
-
+using ResultsManager.Tests.Common.Configuration.Services.TestResults;
 
 namespace Tests.Common.Configuration
 {
@@ -10,6 +10,7 @@ namespace Tests.Common.Configuration
     {
         private static ServiceProvider ServiceProvider { get; set; }
         public static HttpClientFactory HttpClientFactory { get; set; }
+        public static TestResultCollector TestResultCollector { get; set; }
         public static string AuthorizationToken { get; private set; }
 
         public static string NewId => Guid.NewGuid().ToString();
@@ -27,6 +28,7 @@ namespace Tests.Common.Configuration
 
             ServiceProvider = GetServiceProvider(configuration);
             HttpClientFactory = ServiceProvider.GetService<HttpClientFactory>();
+            TestResultCollector = ServiceProvider.GetService<TestResultCollector>();
         }
 
         private static ServiceProvider GetServiceProvider(IConfiguration configuration)
@@ -35,6 +37,7 @@ namespace Tests.Common.Configuration
             //Add all options
             services.Configure<TestServicesOptions>(configuration.GetSection("TestServicesOptions"));
             services.AddSingleton<HttpClientFactory>();
+            services.AddSingleton<TestResultCollector>();
 
             return services.BuildServiceProvider();
         }
