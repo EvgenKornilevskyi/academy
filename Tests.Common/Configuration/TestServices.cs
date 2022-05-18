@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ResultsManager.Tests.Common.Configuration.Options;
 using ResultsManager.Tests.Common.Configuration.Services.Http;
-using ResultsManager.Tests.Common.Configuration.Services.TestResults;
+using ResultsManager.Tests.Common.Configuration.Helpers;
 
 namespace Tests.Common.Configuration
 {
