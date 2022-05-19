@@ -12,10 +12,10 @@ namespace Tests.Integration.Tests.CRUD.Negative.NonExistent;
 public class Comment
 {
     [Test]
-    [Category("GetNonExistentPost")]
-    [TestCaseSource(typeof(TestDataSourceGet), nameof(TestDataSourceGet.GetRequestReturnsPost))]
+    [Category("GetNonExistentComment")]
+    [TestCaseSource(typeof(TestDataSourceGet), nameof(TestDataSourceGet.GetRequestReturnsComment))]
     
-    public async Task GetNonExistentPost(TestData testData)
+    public async Task GetNonExistentComment(TestData testData)
     {
         var responseCommentId =  testData.CommentRequest["GetRequest"].Id;
 
@@ -35,7 +35,7 @@ public class Comment
 
     internal static class TestDataSourceGet
     {
-        internal static IEnumerable GetRequestReturnsPost
+        internal static IEnumerable GetRequestReturnsComment
         {
             get
             {
