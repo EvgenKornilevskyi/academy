@@ -6,6 +6,7 @@ using System.Collections;
 using System.Net;
 using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
+using Tests.Common.Configuration.Services.Creators;
 using Tests.Common.Configuration.TestData;
 
 namespace Tests.Integration.Tests.Users
@@ -21,14 +22,12 @@ namespace Tests.Integration.Tests.Users
                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Users + Endpoints.AccessToken,
                 testData.UserRequest["PostRequest"]);
             var responseContent = await response.Content.ReadAsStringAsync();
-            var responseUserId = JsonConvert.DeserializeObject<UserSingleResponse>(responseContent).User.Id;
+            var User = JsonConvert.DeserializeObject<UserSingleResponse>(responseContent).User;
+
+            await IdentityCreator.DeleteIdentity(Endpoints.Users, User);
 
             Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
                 $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
-
-            await TestServices.HttpClientFactory
-                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Delete(Endpoints.Users + Endpoints.UserId(responseUserId)
-                + Endpoints.AccessToken);
         }
     }
 
