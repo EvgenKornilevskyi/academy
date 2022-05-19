@@ -14,7 +14,7 @@ namespace Tests.Integration.Tests
     {
         [Test]
         [TestCaseSource(typeof(TestDataSource2), nameof(TestDataSource2.GetRequestData))]
-        public async Task HwTask2(TestData testData)
+        public async Task  HwTask2(TestData testData)
         {
             var responce = await TestServices.HttpClientFactory
                  .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + "/9070" +
