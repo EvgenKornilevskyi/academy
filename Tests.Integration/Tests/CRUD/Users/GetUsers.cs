@@ -6,6 +6,7 @@ using System.Collections;
 using System.Net;
 using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
+using Tests.Common.Configuration.Services.Creators;
 using Tests.Common.Configuration.TestData;
 
 namespace Tests.Integration.Tests.Users
@@ -17,14 +18,10 @@ namespace Tests.Integration.Tests.Users
         [TestCaseSource(typeof(TestDataSourceGet), nameof(TestDataSourceGet.GetRequestReturnsUser))]
         public async Task GetRequest_GetUser_ExpectedUserReturned(TestData testData)
         {
-            var responsePost = await TestServices.HttpClientFactory
-                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Users + Endpoints.AccessToken,
-                 testData.UserRequest["GetRequest"]);
-            var responsePostContent = await responsePost.Content.ReadAsStringAsync();
-            var responsePostUserId = JsonConvert.DeserializeObject<UserSingleResponse>(responsePostContent).User.Id;
+            var user = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["GetRequest"]);
 
             var responseGet = await TestServices.HttpClientFactory
-                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + Endpoints.UserId(responsePostUserId) 
+                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + Endpoints.UserId(user.Id) 
                  + Endpoints.AccessToken);
             var responseGetContent = await responseGet.Content.ReadAsStringAsync();
             var responseUser = JsonConvert.DeserializeObject<UserSingleResponse>(responseGetContent).User;
@@ -33,7 +30,7 @@ namespace Tests.Integration.Tests.Users
             {
                 Assert.That(responseGet.StatusCode, Is.EqualTo(testData.StatusCode["StatusCodeOK"]),
                     $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
-                Assert.That(responseUser.Id.ToString, Is.EqualTo(responsePostUserId.ToString()),
+                Assert.That(responseUser.Id.ToString, Is.EqualTo(user.Id.ToString()),
                     "Actual Id isnt equal to expected.");
                 Assert.That(responseUser.Name, Is.EqualTo(testData.UserRequest["GetRequest"].Name),
                     "Actual Name isnt equal to expected.");
@@ -45,9 +42,7 @@ namespace Tests.Integration.Tests.Users
                     "Actual Status isnt equal to expected.");
             });
 
-            await TestServices.HttpClientFactory
-                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Delete(Endpoints.Users + Endpoints.UserId(responsePostUserId)
-                + Endpoints.AccessToken);
+            await IdentityCreator.DeleteIdentity(Endpoints.Users, user);
         }
 
         internal static class TestDataSourceGet

@@ -6,6 +6,7 @@ using System.Collections;
 using System.Net;
 using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
+using Tests.Common.Configuration.Services.Creators;
 using Tests.Common.Configuration.TestData;
 
 namespace Tests.Integration.Tests.Users
@@ -17,35 +18,30 @@ namespace Tests.Integration.Tests.Users
         [TestCaseSource(typeof(TestDataSourcePut), nameof(TestDataSourcePut.PutRequestUpdatesUser))]
         public async Task PutRequest_UpdateUser_ExpectedUserUpdated(TestData testData)
         {
-            var responsePost = await TestServices.HttpClientFactory
-                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Users + Endpoints.AccessToken,
-                 testData.UserRequest["PostRequest"]);
-            var responsePostContent = await responsePost.Content.ReadAsStringAsync();
-            var responsePostUserId = JsonConvert.DeserializeObject<UserSingleResponse>(responsePostContent).User.Id;
+            var initialUser = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["PostRequest"]);
 
-            var responsePut = await TestServices.HttpClientFactory
-                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Put(Endpoints.Users + Endpoints.UserId(responsePostUserId)
+            var response = await TestServices.HttpClientFactory
+                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Put(Endpoints.Users + Endpoints.UserId(initialUser.Id)
                  + Endpoints.AccessToken, testData.UserRequest["PutRequest"]);
-            var responsePutContent = await responsePut.Content.ReadAsStringAsync();
-            var responsePutUser = JsonConvert.DeserializeObject<UserSingleResponse>(responsePutContent).User;
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var updatedUser = JsonConvert.DeserializeObject<UserSingleResponse>(responseContent).User;
 
+            await IdentityCreator.DeleteIdentity(Endpoints.Users, initialUser);
+
+            //Assert
             Assert.Multiple(() =>
             {
-                Assert.That(responsePut.StatusCode, Is.EqualTo(testData.StatusCode["StatusCodeOK"]),
+                Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["PutRequest"]),
                     $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
-                Assert.That(responsePutUser.Name, Is.EqualTo(testData.UserRequest["PutRequest"].Name),
+                Assert.That(updatedUser.Name, Is.EqualTo(testData.UserRequest["PutRequest"].Name),
                     "Actual Name isnt equal to expected.");
-                Assert.That(responsePutUser.Email, Is.EqualTo(testData.UserRequest["PutRequest"].Email),
+                Assert.That(updatedUser.Email, Is.EqualTo(testData.UserRequest["PutRequest"].Email),
                     "Actual Email isnt equal to expected.");
-                Assert.That(responsePutUser.Gender, Is.EqualTo(testData.UserRequest["PutRequest"].Gender),
+                Assert.That(updatedUser.Gender, Is.EqualTo(testData.UserRequest["PutRequest"].Gender),
                     "Actual Gender isnt equal to expected.");
-                Assert.That(responsePutUser.Status, Is.EqualTo(testData.UserRequest["PutRequest"].Status),
+                Assert.That(updatedUser.Status, Is.EqualTo(testData.UserRequest["PutRequest"].Status),
                     "Actual Status isnt equal to expected.");
             });
-
-            await TestServices.HttpClientFactory
-                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Delete(Endpoints.Users + Endpoints.UserId(responsePostUserId)
-                + Endpoints.AccessToken);
         }
 
         internal static class TestDataSourcePut
@@ -72,7 +68,7 @@ namespace Tests.Integration.Tests.Users
                     data.UserRequest["PutRequest"].Gender = "male";
                     data.UserRequest["PutRequest"].Status = "active";
 
-                    data.StatusCode["StatusCodeOK"] = HttpStatusCode.OK;
+                    data.StatusCode["PutRequest"] = HttpStatusCode.OK;
 
                     yield return new TestCaseData(data)
                         .SetArgDisplayNames("UpdatesUserById");

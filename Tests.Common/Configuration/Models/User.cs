@@ -1,8 +1,9 @@
 using Newtonsoft.Json;
+using Tests.Common.Configuration.Interfaces;
 
 namespace Tests.Common.Configuration.Models
 {
-    public class User
+    public class User : IIdentity
     {
         [JsonProperty("id")]
         public int Id { get; set; }

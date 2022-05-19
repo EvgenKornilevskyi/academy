@@ -6,6 +6,7 @@ using System.Collections;
 using System.Net;
 using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
+using Tests.Common.Configuration.Services.Creators;
 using Tests.Common.Configuration.TestData;
 
 namespace Tests.Integration.Tests.Users
@@ -17,14 +18,10 @@ namespace Tests.Integration.Tests.Users
         [TestCaseSource(typeof(TestDataSourceDelete), nameof(TestDataSourceDelete.DeleteRequestReturnsStatusNoContent))]
         public async Task DeleteRequest_DeleteUser_ExpectedStatusCodeReturned(TestData testData)
         {
-            var responsePost = await TestServices.HttpClientFactory
-                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Users + Endpoints.AccessToken,
-                testData.UserRequest["DeleteRequest"]);
-            var responsePostContent = await responsePost.Content.ReadAsStringAsync();
-            var responsePostUserId = JsonConvert.DeserializeObject<UserSingleResponse>(responsePostContent).User.Id;
+            var user = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["DeleteRequest"]);
 
             var responseDelete = await TestServices.HttpClientFactory
-                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Delete(Endpoints.Users + Endpoints.UserId(responsePostUserId)
+                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Delete(Endpoints.Users + Endpoints.UserId(user.Id)
                 + Endpoints.AccessToken);
 
             Assert.That(responseDelete.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),

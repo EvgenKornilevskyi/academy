@@ -12,7 +12,6 @@ namespace Tests.Common.Configuration
         public static HttpClientFactory HttpClientFactory { get; set; }
         public static TestResultCollector TestResultCollector { get; set; }
         public static string AuthorizationToken { get; private set; }
-
         public static string NewId => Guid.NewGuid().ToString();
         public static int Rand => new Random(Environment.TickCount).Next(int.MaxValue);
 
