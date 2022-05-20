@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tests.Common.Configuration.Interfaces;
 using Tests.Common.Configuration.Models;
+using Tests.Common.Configuration.Models.Responses;
 using Tests.Common.Configuration.TestData;
 
 namespace Tests.Common.Configuration.Services.Creators
@@ -20,7 +21,18 @@ namespace Tests.Common.Configuration.Services.Creators
                  .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(endpoint + Endpoints.AccessToken,
                  payload);
             var responsePostContent = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<UserSingleResponse>(responsePostContent).User;
+            if(endpoint == Endpoints.Users)
+            {
+                return JsonConvert.DeserializeObject<UserSingleResponse>(responsePostContent).User;
+            }
+            else if (endpoint == Endpoints.Posts)
+            {
+                return JsonConvert.DeserializeObject<PostSingleResponse>(responsePostContent).Post;
+            }
+            else
+            {
+                return JsonConvert.DeserializeObject<CommentSingleResponse>(responsePostContent).Comment;
+            }
         }
         public static async Task DeleteIdentity(string endpoint, IIdentity identity)
         {
