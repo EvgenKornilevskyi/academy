@@ -13,5 +13,8 @@ namespace Tests.Common.Configuration
         public static string AccessToken = "?access-token=" + TestServices.AuthorizationToken;
         public static string Email(string email) => $"?email={email}";
         public static string UserId(int id) => $"/{id}";
+        public static string PostId(int id) => $"/{id}";
+        
+        public static string CommentId(int id) => $"/{id}";
     }
 }
