@@ -13,29 +13,27 @@ using Tests.Integration.Tests.CRUD.Posts;
 
 namespace Tests.Integration.Tests.CRUD.Posts
 {
-    public class PostPosts : TestBase
+    public class DeletePosts : TestBase
     {
         [Test]
-        [Category("Post")]
-        [TestCaseSource(typeof(TestDataSourcePosts), nameof(TestDataSourcePosts.PostRequestReturnsStatusCodeCreated))]
-        public async Task PostRequest_PostPost_ExpectedStatusCodeReturned(TestData testData)
+        [Category("Delete")]
+        [TestCaseSource(typeof(TestDataSourcePosts), nameof(TestDataSourcePosts.DeleteRequestReturnsStatusCodeNoContent))]
+        public async Task DeleteRequest_DeletePost_ExpectedStatusCodeReturned(TestData testData)
         {
             var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
 
             testData.PostRequest["PostRequest"].UserId = User.Id;
 
+            var Post = await IdentityCreator.CreateIdentity(Endpoints.Posts, testData.PostRequest["PostRequest"]);
+
             var response = await TestServices.HttpClientFactory
-                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Posts + Endpoints.AccessToken,
-                testData.PostRequest["PostRequest"]);
+                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Delete(Endpoints.Posts + Endpoints.PostId(Post.Id) + Endpoints.AccessToken);
             var responseContent = await response.Content.ReadAsStringAsync();
-            var Post = JsonConvert.DeserializeObject<PostSingleResponse>(responseContent).Post;
 
             await IdentityCreator.DeleteIdentity(Endpoints.Users, User);
-            await IdentityCreator.DeleteIdentity(Endpoints.Posts, Post);
 
             Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
                 $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
         }
     }
 }
-

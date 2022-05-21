@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
+using Polly;
 using ResultsManager.Tests.Common.Configuration.Services.Http;
 using ResultsManager.Tests.Common.Helpers;
 using System.Collections;
@@ -9,13 +10,13 @@ using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.Services.Creators;
 using Tests.Common.Configuration.TestData;
 
-namespace Tests.Integration.Tests.Users
+namespace Tests.Integration.Tests.CRUD.Users
 {
     public class PostUsers : TestBase
     {
         [Test]
         [Category("Post")]
-        [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeCreated))]
+        [TestCaseSource(typeof(TestDataSourceUsers), nameof(TestDataSourceUsers.PostRequestReturnsStatusCodeCreated))]
         public async Task PostRequest_PostUser_ExpectedStatusCodeReturned(TestData testData)
         {
             var response = await TestServices.HttpClientFactory
@@ -28,29 +29,6 @@ namespace Tests.Integration.Tests.Users
 
             Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
                 $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
-        }
-    }
-
-    internal static class TestDataSourcePost
-    {
-        internal static IEnumerable PostRequestReturnsStatusCodeCreated
-        {
-            get
-            {
-                var data = new TestData();
-
-                data.UserRequest["PostRequest"] = new User();
-
-                data.UserRequest["PostRequest"].Id = TestServices.Rand;
-                data.UserRequest["PostRequest"].Name = TestServices.NewId.ToString();
-                data.UserRequest["PostRequest"].Email = TestServices.NewId.ToString() + "@mail.com";
-                data.UserRequest["PostRequest"].Gender = "male";
-                data.UserRequest["PostRequest"].Status = "active";
-
-                data.StatusCode["StatusCode"] = HttpStatusCode.Created;
-
-                yield return new TestCaseData(data).SetArgDisplayNames("ValidRequestShouldReturn201");
-            }
         }
     }
 }
