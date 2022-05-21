@@ -8,7 +8,6 @@ namespace Tests.Common.Configuration
         public const string Posts = _basePath + "/posts";
         public const string Comments = _basePath + "/comments";
         public const string Todos = _basePath + "/todos";
-        
 
         public static string AccessToken = "?access-token=" + TestServices.AuthorizationToken;
         public static string Email(string email) => $"?email={email}";

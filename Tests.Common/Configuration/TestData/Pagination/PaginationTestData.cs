@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Tests.Common.Configuration.TestData.Pagination
+namespace Tests.Common.Configuration.TestData
 {
     public class PaginationTestData
     {

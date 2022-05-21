@@ -7,7 +7,6 @@ using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.Models.Responses;
 using Tests.Common.Configuration.TestData;
-using Tests.Common.Configuration.TestData.Pagination;
 
 namespace Tests.Integration.Tests
 {
@@ -16,87 +15,111 @@ namespace Tests.Integration.Tests
     {
         [Test]
         [Category("Pagination")]
-        [TestCaseSource(typeof(PaginationTestData), nameof(PaginationTestData.GetAllPagination))]
-        public async Task Get_EntitiesByPage_ReturnsExpectedPageNumber(string endpoint, int page)
+        [TestCaseSource(typeof(TestDataSource), nameof(TestDataSource.GetPage))]
+        public async Task Get_EntitiesByPage_ReturnsExpectedPageNumber(TestData testData)
         {
             //Arrange
-            //var response = await TestServices.HttpClientFactory.SendHttpRequestTo(HttpApisNames.Jsonplaceholder)
-            //    .Get(endpoint + $"?page={expectedPage}");
-            //var responseBody = await response.Content.ReadAsStringAsync();
-            //var entities = JsonConvert.DeserializeObject<BaseResponse>(responseBody);
+            var expectedPage = testData.Pagination["Pagination"].Page;
+            var endpoint = testData.Strings["Endpoint"];
+            var response = await TestServices.HttpClientFactory.SendHttpRequestTo(HttpApisNames.Jsonplaceholder)
+                .Get(endpoint + $"?page={expectedPage}");
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var entities = JsonConvert.DeserializeObject<BaseResponse>(responseBody);
 
-            ////Act
-            //var actualPage = entities?.Meta?.Pagination.Page;
+            //Act
+            var actualPage = entities?.Meta?.Pagination.Page;
 
-            ////Assert
-            //Assert.AreEqual(expectedPage, actualPage);
-            // dotnet test --filter TestCategory=Pagination
+            //Assert
+            Assert.AreEqual(expectedPage, actualPage);
+            //dotnet test --filter TestCategory = Pagination
         }
 
-        [TestCaseSource(typeof(PaginationTestData), nameof(PaginationTestData.GetPostsPagination))]
-        public async Task Get_LimitPosts_Returns20Posts(string endpoint, int page)
+        [Category("Pagination")]
+        public async Task Get_LimitPosts_Returns20Posts()
         {
-            ////Arrange
-            //var response = await HttpClient.Get(endpoint + $"?page={page}");
-            //var responseBody = await response.Content.ReadAsStringAsync();
-            //var entities = JsonConvert.DeserializeObject<PostsResponse>(responseBody);
+            //Arrange
+            var response = await TestServices.HttpClientFactory.SendHttpRequestTo(HttpApisNames.Jsonplaceholder)
+                .Get(Endpoints.Posts);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var entities = JsonConvert.DeserializeObject<PostsResponse>(responseBody);
 
-            ////Act
-            //var actualLimit = entities.Meta.Pagination.Limit;
-            //var expectedUsersCount = entities.Posts.Count;
+            //Act
+            var actualLimit = entities.Meta.Pagination.Limit;
+            var expectedPostsCount = entities.Posts.Count;
 
-            ////Assert
-            //Assert.AreEqual(expectedUsersCount, actualLimit);
+            //Assert
+            Assert.LessOrEqual(actualLimit, expectedPostsCount);
         }
-        
-        [TestCaseSource(typeof(PaginationTestData), nameof(PaginationTestData.GetUsersPagination))]
-        public async Task Get_LimitUsers_Returns20Users(string endpoint, int expectedPage)
+
+        [Category("Pagination")]
+        public async Task Get_LimitUsers_Returns20Users()
         {
-            ////Arrange
-            //var response = await HttpClient.Get(endpoint + $"?page={expectedPage}");
-            //var responseBody = await response.Content.ReadAsStringAsync();
-            //var entities = JsonConvert.DeserializeObject<UsersResponse>(responseBody);
+            //Arrange
+            var response = await TestServices.HttpClientFactory.SendHttpRequestTo(HttpApisNames.Jsonplaceholder)
+                .Get(Endpoints.Users);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var entities = JsonConvert.DeserializeObject<UsersResponse>(responseBody);
 
-            ////Act
-            //var actualLimit = entities.Meta.Pagination.Limit;
-            //var expectedUsersCount = entities.Users.Count;
+            //Act
+            var actualLimit = entities.Meta.Pagination.Limit;
+            var expectedUsersCount = entities.Users.Count;
 
-            ////Assert
-            //Assert.AreEqual(expectedUsersCount, actualLimit);
+            //Assert
+            Assert.LessOrEqual(expectedUsersCount, actualLimit);
         }
 
-        [TestCaseSource(typeof(PaginationTestData), nameof(PaginationTestData.GetCommentsPagination))]
-        public async Task Get_LimitComments_Returns20Comments(string endpoint, int expectedPage)
+        [Category("Pagination")]
+        public async Task Get_LimitComments_Returns20Comments()
         {
-            ////Arrange
-            //var response = await HttpClient.Get(endpoint + $"?page={expectedPage}");
-            //var responseBody = await response.Content.ReadAsStringAsync();
-            //var entities = JsonConvert.DeserializeObject<CommentsResponse>(responseBody);
+            //Arrange
+            var response = await TestServices.HttpClientFactory.SendHttpRequestTo(HttpApisNames.Jsonplaceholder)
+                .Get(Endpoints.Comments);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var entities = JsonConvert.DeserializeObject<CommentsResponse>(responseBody);
 
-            ////Act
-            //var actualLimit = entities.Meta.Pagination.Limit;
-            //var expectedUsersCount = entities.Comments.Count;
+            //Act
+            var actualLimit = entities.Meta.Pagination.Limit;
+            var expectedCommentsCount = entities.Comments.Count;
 
-            ////Assert
-            //Assert.AreEqual(expectedUsersCount, actualLimit);
+            //Assert
+            Assert.LessOrEqual(expectedCommentsCount, actualLimit);
         }
 
-        //internal static class TestDataSource
-        //{
-        //    internal static IEnumerable ReturnsUserById
-        //    {
-        //        get
-        //        {
-        //            var data = new TestData();
+        internal static class TestDataSource
+        {
+            internal static IEnumerable GetPage
+            {
+                get
+                {
+                    var postsData = new TestData();
 
-        //            data.Pagination["Pagination"] = ;
+                    postsData.Pagination["Pagination"] = new Pagination();
+                    postsData.Pagination["Pagination"].Page = 1;
+                    postsData.Strings["Endpoint"] = Endpoints.Posts;
 
+                    var commentsData = new TestData();
+
+                    commentsData.Pagination["Pagination"] = new Pagination();
+                    commentsData.Pagination["Pagination"].Page = 1;
+                    commentsData.Strings["Endpoint"] = Endpoints.Comments;
                     
+                    var usersData = new TestData();
 
-        //            yield return new TestCaseData(data)
-        //                .SetArgDisplayNames("ReturnsUserById");
-        //        }
-        //    }
-        //}
+                    usersData.Pagination["Pagination"] = new Pagination();
+                    usersData.Pagination["Pagination"].Page = 1;
+                    usersData.Strings["Endpoint"] = Endpoints.Users;
+
+                    yield return new TestCaseData(postsData)
+                        .SetArgDisplayNames("GetPage");
+                    
+                    yield return new TestCaseData(commentsData)
+                        .SetArgDisplayNames("GetPage");
+                    
+                    yield return new TestCaseData(usersData)
+                        .SetArgDisplayNames("GetPage");
+                }
+            }  
+        }
     }
 }
+
