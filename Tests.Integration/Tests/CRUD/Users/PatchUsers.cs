@@ -14,7 +14,6 @@ namespace Tests.Integration.Tests.CRUD.Users
     public class PatchUsers : TestBase
     {
         [Test]
-        //[Ignore("Ignore a test")]
         [Category("Patch")]
         [TestCaseSource(typeof(TestDataSourceUsers), nameof(TestDataSourceUsers.PatchRequestUpdatesUserEmail))]
         public async Task PatchRequest_UpdatesUserEmail_ExpectedUserUpdated(TestData testData)
