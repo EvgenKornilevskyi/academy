@@ -1,6 +1,8 @@
 using NUnit.Framework;
 using ResultsManager.Tests.Common.Configuration.Services.Http;
 using Tests.Common.Configuration;
+using Tests.Common.Configuration.Models;
+using Tests.Common.Configuration.Services.Creators;
 
 namespace Tests.Integration
 {

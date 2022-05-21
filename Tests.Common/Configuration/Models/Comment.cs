@@ -15,5 +15,20 @@ namespace Tests.Common.Configuration.Models
         public string? Email { get; set; }
         [JsonProperty("body")]
         public string? Body { get; set; }
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (!(obj is Comment))
+            {
+                return false;
+            }
+            return (PostId == ((Comment)obj).PostId)
+                   && (Name == ((Comment)obj).Name)
+                   && (Email == ((Comment)obj).Email)
+                   && (Body == ((Comment)obj).Body);
+        }
     }
 }

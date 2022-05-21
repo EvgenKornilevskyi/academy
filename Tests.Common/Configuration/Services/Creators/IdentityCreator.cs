@@ -22,8 +22,13 @@ namespace Tests.Common.Configuration.Services.Creators
             var response = await TestServices.HttpClientFactory
                  .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(endpoint + Endpoints.AccessToken,
                  payload);
+            if(response.StatusCode != HttpStatusCode.Created)
+            {
+                TestContext.WriteLine("Failed creating Identity");
+                TestContext.WriteLine(response.StatusCode.ToString());
+            }
             var responseContent = await response.Content.ReadAsStringAsync();
-            if(endpoint == Endpoints.Users)
+            if (endpoint == Endpoints.Users)
             {
                 return JsonConvert.DeserializeObject<UserSingleResponse>(responseContent).User;
             }

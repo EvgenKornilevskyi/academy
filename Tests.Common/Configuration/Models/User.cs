@@ -15,5 +15,21 @@ namespace Tests.Common.Configuration.Models
         public string? Gender { get; set; }
         [JsonProperty("status")]
         public string? Status { get; set; }
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (!(obj is User))
+            {
+                return false;
+            }
+            return (Id == ((User)obj).Id)
+                   && (Name == ((User)obj).Name)
+                   && (Email == ((User)obj).Email
+                   && (Gender == ((User)obj).Gender)
+                   && (Status == ((User)obj).Status));
+        }
     }
 }

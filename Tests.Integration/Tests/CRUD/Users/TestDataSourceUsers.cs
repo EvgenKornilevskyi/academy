@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
+using Tests.Common.Configuration.Services.Creators;
 using Tests.Common.Configuration.TestData;
 
 namespace Tests.Integration.Tests.CRUD.Users
