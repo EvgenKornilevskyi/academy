@@ -21,7 +21,7 @@ namespace Tests.Integration.Tests.CRUD.Comments
         public async Task PostRequest_PostComment_ExpectedStatusCodeReturned(TestData testData)
         {
             var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
-            
+
             testData.PostRequest["PostRequest"].UserId = User.Id;
 
             var Post = await IdentityCreator.CreateIdentity(Endpoints.Posts, testData.PostRequest["PostRequest"]);

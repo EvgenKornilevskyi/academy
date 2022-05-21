@@ -21,7 +21,7 @@ namespace Tests.Integration.Tests.CRUD.Users
             var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
 
             var response = await TestServices.HttpClientFactory
-                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + Endpoints.UserId(User.Id) 
+                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + Endpoints.UserId(User.Id)
                  + Endpoints.AccessToken);
             var responseContent = await response.Content.ReadAsStringAsync();
             var responseUser = JsonConvert.DeserializeObject<UserSingleResponse>(responseContent).User;
