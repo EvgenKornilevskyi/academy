@@ -16,8 +16,8 @@ namespace Tests.Integration.Tests.CRUD.Posts
     {
         [Test]
         [Category("Put")]
-        [TestCaseSource(typeof(TestDataSourcePosts), nameof(TestDataSourcePosts.PutRequestUpdatesPost))]
-        public async Task PutRequest_UpdatePost_ExpectedPostUpdated(TestData testData)
+        [TestCaseSource(typeof(TestDataSourcePosts), nameof(TestDataSourcePosts.PutRequestUpdatesPostAllFields))]
+        public async Task PutRequest_UpdatePostAllFields_ExpectedPostUpdated(TestData testData)
         {
             var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
 
@@ -35,17 +35,16 @@ namespace Tests.Integration.Tests.CRUD.Posts
             await IdentityCreator.DeleteIdentity(Endpoints.Users, User);
             await IdentityCreator.DeleteIdentity(Endpoints.Posts, Post);
 
-            //Assert
             Assert.Multiple(() =>
             {
                 Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
                     $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
                 Assert.That(updatedPost.UserId, Is.EqualTo(testData.PostRequest["updatedPostRequest"].UserId),
-                    "Actual Email isnt equal to expected.");
+                    "Actual UserId isnt equal to expected.");
                 Assert.That(updatedPost.Title, Is.EqualTo(testData.PostRequest["updatedPostRequest"].Title),
-                    "Actual Gender isnt equal to expected.");
+                    "Actual Title isnt equal to expected.");
                 Assert.That(updatedPost.Body, Is.EqualTo(testData.PostRequest["updatedPostRequest"].Body),
-                    "Actual Status isnt equal to expected.");
+                    "Actual Body isnt equal to expected.");
             });
         }
     }

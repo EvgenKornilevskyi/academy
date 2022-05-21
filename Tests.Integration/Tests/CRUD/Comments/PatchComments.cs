@@ -12,12 +12,13 @@ using Tests.Common.Configuration.TestData;
 
 namespace Tests.Integration.Tests.CRUD.Comments
 {
-    public class PutComments : TestBase
+    public class PatchComments : TestBase
     {
         [Test]
-        [Category("Put")]
-        [TestCaseSource(typeof(TestDataSourceComments), nameof(TestDataSourceComments.PutRequestUpdatesCommentAllFields))]
-        public async Task PutRequest_UpdateCommentAllFields_ExpectedCommentUpdated(TestData testData)
+        [Ignore("Ignore a test")]
+        [Category("Patch")]
+        [TestCaseSource(typeof(TestDataSourceComments), nameof(TestDataSourceComments.PatchRequestUpdatesCommentEmail))]
+        public async Task PatchRequest_UpdateCommentEmail_ExpectedCommentUpdated(TestData testData)
         {
             var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
 
@@ -31,7 +32,7 @@ namespace Tests.Integration.Tests.CRUD.Comments
             var Comment = await IdentityCreator.CreateIdentity(Endpoints.Comments, testData.CommentRequest["initialCommentRequest"]);
 
             var response = await TestServices.HttpClientFactory
-                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Put(Endpoints.Comments + Endpoints.CommentId(Comment.Id)
+                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Patch(Endpoints.Comments + Endpoints.CommentId(Comment.Id)
                  + Endpoints.AccessToken, testData.CommentRequest["updatedCommentRequest"]);
             var responseContent = await response.Content.ReadAsStringAsync();
             var updatedComment = JsonConvert.DeserializeObject<CommentSingleResponse>(responseContent).Comment;
@@ -43,20 +44,19 @@ namespace Tests.Integration.Tests.CRUD.Comments
             Assert.Multiple(() =>
             {
                 Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
-                    $"Actual StatusCode isnt equal to expected. {Endpoints.Comments}");
-                Assert.That(updatedComment.Id, Is.EqualTo(Comment.Id),
-                    "Actual Id isnt equal to expected.");
+                    $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
                 Assert.That(updatedComment.PostId, Is.EqualTo(testData.CommentRequest["updatedCommentRequest"].PostId),
-                    "Actual PostId isnt equal to expected.");
-                Assert.That(updatedComment.Name, Is.EqualTo(testData.CommentRequest["updatedCommentRequest"].Name),
-                    "Actual Name isnt equal to expected.");
+                    "Actual Email isnt equal to expected.");
                 Assert.That(updatedComment.Email, Is.EqualTo(testData.CommentRequest["updatedCommentRequest"].Email),
                     "Actual Email isnt equal to expected.");
+                Assert.That(updatedComment.Name, Is.EqualTo(testData.CommentRequest["updatedCommentRequest"].Name),
+                    "Actual Name isnt equal to expected.");
                 Assert.That(updatedComment.Body, Is.EqualTo(testData.CommentRequest["updatedCommentRequest"].Body),
-                    "Actual Body isnt equal to expected.");
+                    "Actual Email isnt equal to expected.");
             });
         }
     }
 }
+
 
 

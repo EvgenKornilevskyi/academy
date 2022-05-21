@@ -18,10 +18,10 @@ namespace Tests.Integration.Tests.CRUD.Users
         [TestCaseSource(typeof(TestDataSourceUsers), nameof(TestDataSourceUsers.DeleteRequestReturnsStatusNoContent))]
         public async Task DeleteRequest_DeleteUser_ExpectedStatusCodeReturned(TestData testData)
         {
-            var user = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
+            var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
 
             var responseDelete = await TestServices.HttpClientFactory
-                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Delete(Endpoints.Users + Endpoints.UserId(user.Id)
+                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Delete(Endpoints.Users + Endpoints.UserId(User.Id)
                 + Endpoints.AccessToken);
 
             Assert.That(responseDelete.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),

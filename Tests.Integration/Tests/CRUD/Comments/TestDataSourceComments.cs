@@ -14,7 +14,50 @@ namespace Tests.Integration.Tests.CRUD.Comments
 {
     internal class TestDataSourceComments
     {
-        internal static IEnumerable PutRequestUpdatesComment
+        internal static IEnumerable PatchRequestUpdatesCommentEmail
+        {
+            get
+            {
+                var data = new TestData();
+
+                data.UserRequest["UserRequest"] = CreateExpectedUserResponse();
+
+                data.PostRequest["PostRequest"] = CreateExpectedPostResponse();
+
+                data.CommentRequest["initialCommentRequest"] = CreateExpectedCommentResponse();
+
+                data.CommentRequest["updatedCommentRequest"] = new Comment()
+                {
+                    Id = data.CommentRequest["initialCommentRequest"].Id,
+                    PostId = data.CommentRequest["initialCommentRequest"].PostId,
+                    Name = data.CommentRequest["initialCommentRequest"].Name,
+                    Email = "Changedcomment@email.com",
+                    Body = data.CommentRequest["initialCommentRequest"].Body
+                };
+
+                data.StatusCode["StatusCode"] = HttpStatusCode.OK;
+
+                yield return new TestCaseData(data).SetArgDisplayNames("ValidRequestShouldReturn200");
+            }
+        }
+        internal static IEnumerable DeleteRequestReturnsStatusCodeNoContent
+        {
+            get
+            {
+                var data = new TestData();
+
+                data.UserRequest["UserRequest"] = CreateExpectedUserResponse();
+
+                data.PostRequest["PostRequest"] = CreateExpectedPostResponse();
+
+                data.CommentRequest["CommentRequest"] = CreateExpectedCommentResponse();
+
+                data.StatusCode["StatusCode"] = HttpStatusCode.NoContent;
+
+                yield return new TestCaseData(data).SetArgDisplayNames("ValidRequestShouldReturn204");
+            }
+        }
+        internal static IEnumerable PutRequestUpdatesCommentAllFields
         {
             get
             {
@@ -57,8 +100,7 @@ namespace Tests.Integration.Tests.CRUD.Comments
                 yield return new TestCaseData(data).SetArgDisplayNames("ValidRequestShouldReturn200");
             }
         }
-
-        internal static IEnumerable PostCommentRequestReturnsStatusCodeCreated
+        internal static IEnumerable PostRequestReturnsStatusCodeCreated
         {
             get
             {

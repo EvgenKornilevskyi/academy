@@ -18,7 +18,7 @@ namespace Tests.Integration.Tests.CRUD.Posts
         [Test]
         [Category("Get")]
         [TestCaseSource(typeof(TestDataSourcePosts), nameof(TestDataSourcePosts.GetRequestReturnsPost))]
-        public async Task PostRequest_PostPost_ExpectedStatusCodeReturned(TestData testData)
+        public async Task GetRequest_GetPost_ExpectedPostReturned(TestData testData)
         {
             var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
 
@@ -41,11 +41,11 @@ namespace Tests.Integration.Tests.CRUD.Posts
                 Assert.That(responsePost.Id, Is.EqualTo(Post.Id),
                     "Actual Id isnt equal to expected.");
                 Assert.That(responsePost.UserId, Is.EqualTo(testData.PostRequest["PostRequest"].UserId),
-                    "Actual Name isnt equal to expected.");
+                    "Actual UserId isnt equal to expected.");
                 Assert.That(responsePost.Title, Is.EqualTo(testData.PostRequest["PostRequest"].Title),
-                    "Actual Email isnt equal to expected.");
+                    "Actual Title isnt equal to expected.");
                 Assert.That(responsePost.Body, Is.EqualTo(testData.PostRequest["PostRequest"].Body),
-                    "Actual Gender isnt equal to expected.");
+                    "Actual Body isnt equal to expected.");
             });
         }
     }

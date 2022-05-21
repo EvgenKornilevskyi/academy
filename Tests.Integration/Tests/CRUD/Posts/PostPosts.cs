@@ -34,7 +34,7 @@ namespace Tests.Integration.Tests.CRUD.Posts
             await IdentityCreator.DeleteIdentity(Endpoints.Posts, Post);
 
             Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
-                $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
+                $"Actual StatusCode isnt equal to expected. {Endpoints.Posts}");
         }
     }
 }

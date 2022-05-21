@@ -15,10 +15,9 @@ namespace Tests.Integration.Tests.CRUD.Posts
     public class PatchPosts : TestBase
     {
         [Test]
-        [Ignore("Ignore a test")]
         [Category("Patch")]
-        [TestCaseSource(typeof(TestDataSourcePosts), nameof(TestDataSourcePosts.PatchRequestUpdatesPost))]
-        public async Task PatchRequest_UpdatePost_ExpectedPostUpdated(TestData testData)
+        [TestCaseSource(typeof(TestDataSourcePosts), nameof(TestDataSourcePosts.PatchRequestUpdatesPostTitle))]
+        public async Task PatchRequest_UpdatePostTitle_ExpectedPostUpdated(TestData testData)
         {
             var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
 
@@ -29,20 +28,23 @@ namespace Tests.Integration.Tests.CRUD.Posts
 
             var response = await TestServices.HttpClientFactory
                  .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Patch(Endpoints.Posts + Endpoints.PostId(Post.Id)
-                 + Endpoints.AccessToken, testData.PostRequest["updatedPostRequest"].Title);
+                 + Endpoints.AccessToken, testData.PostRequest["updatedPostRequest"]);
             var responseContent = await response.Content.ReadAsStringAsync();
             var updatedPost = JsonConvert.DeserializeObject<PostSingleResponse>(responseContent).Post;
 
             await IdentityCreator.DeleteIdentity(Endpoints.Users, User);
             await IdentityCreator.DeleteIdentity(Endpoints.Posts, Post);
 
-            //Assert
             Assert.Multiple(() =>
             {
                 Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
                     $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
                 Assert.That(updatedPost.Title, Is.EqualTo(testData.PostRequest["updatedPostRequest"].Title),
-                    "Actual Gender isnt equal to expected.");
+                    "Actual Title isnt equal to expected.");
+                Assert.That(updatedPost.UserId, Is.EqualTo(testData.PostRequest["updatedPostRequest"].UserId),
+                    "Actual UserId isnt equal to expected.");
+                Assert.That(updatedPost.Body, Is.EqualTo(testData.PostRequest["updatedPostRequest"].Body),
+                    "Actual Body isnt equal to expected.");
             });
         }
     }

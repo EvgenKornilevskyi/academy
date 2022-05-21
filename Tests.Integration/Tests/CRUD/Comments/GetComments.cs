@@ -46,13 +46,13 @@ namespace Tests.Integration.Tests.CRUD.Comments
                 Assert.That(responseComment.Id, Is.EqualTo(Comment.Id),
                     "Actual Id isnt equal to expected.");
                 Assert.That(responseComment.PostId, Is.EqualTo(testData.CommentRequest["CommentRequest"].PostId),
-                    "Actual Name isnt equal to expected.");
+                    "Actual PostId isnt equal to expected.");
                 Assert.That(responseComment.Name, Is.EqualTo(testData.CommentRequest["CommentRequest"].Name),
-                    "Actual Email isnt equal to expected.");
+                    "Actual Name isnt equal to expected.");
                 Assert.That(responseComment.Email, Is.EqualTo(testData.CommentRequest["CommentRequest"].Email),
-                    "Actual Gender isnt equal to expected.");
+                    "Actual Email isnt equal to expected.");
                 Assert.That(responseComment.Body, Is.EqualTo(testData.CommentRequest["CommentRequest"].Body),
-                    "Actual Gender isnt equal to expected.");
+                    "Actual Body isnt equal to expected.");
             });
         }
     }

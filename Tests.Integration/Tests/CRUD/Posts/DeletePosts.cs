@@ -28,7 +28,6 @@ namespace Tests.Integration.Tests.CRUD.Posts
 
             var response = await TestServices.HttpClientFactory
                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Delete(Endpoints.Posts + Endpoints.PostId(Post.Id) + Endpoints.AccessToken);
-            var responseContent = await response.Content.ReadAsStringAsync();
 
             await IdentityCreator.DeleteIdentity(Endpoints.Users, User);
 

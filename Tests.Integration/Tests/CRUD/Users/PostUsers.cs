@@ -21,7 +21,7 @@ namespace Tests.Integration.Tests.CRUD.Users
         {
             var response = await TestServices.HttpClientFactory
                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Users + Endpoints.AccessToken,
-                testData.UserRequest["PostRequest"]);
+                testData.UserRequest["UserRequest"]);
             var responseContent = await response.Content.ReadAsStringAsync();
             var User = JsonConvert.DeserializeObject<UserSingleResponse>(responseContent).User;
 

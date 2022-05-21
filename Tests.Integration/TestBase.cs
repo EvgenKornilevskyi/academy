@@ -17,9 +17,9 @@ namespace Tests.Integration
         [TearDown] 
         public void Cleanup()
         {
-            string name = TestContext.CurrentContext.Test.Name.ToString();
-            string result = TestContext.CurrentContext.Result.Outcome.ToString();
-            TestServices.TestResultCollector.AddResult(name, result);
+            //string name = TestContext.CurrentContext.Test.Name.ToString();
+            //string result = TestContext.CurrentContext.Result.Outcome.ToString();
+            //TestServices.TestResultCollector.AddResult(name, result);
         }
     }
     [SetUpFixture]
@@ -33,7 +33,7 @@ namespace Tests.Integration
         [OneTimeTearDown]
         public void OneTimeTeatDown()
         {
-            TestServices.TestResultCollector.SaveResults();
+            //TestServices.TestResultCollector.SaveResults();
         }
     }
 }

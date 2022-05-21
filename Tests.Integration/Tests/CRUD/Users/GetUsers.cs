@@ -18,19 +18,21 @@ namespace Tests.Integration.Tests.CRUD.Users
         [TestCaseSource(typeof(TestDataSourceUsers), nameof(TestDataSourceUsers.GetRequestReturnsUser))]
         public async Task GetRequest_GetUser_ExpectedUserReturned(TestData testData)
         {
-            var user = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
+            var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
 
             var response = await TestServices.HttpClientFactory
-                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + Endpoints.UserId(user.Id) 
+                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + Endpoints.UserId(User.Id) 
                  + Endpoints.AccessToken);
             var responseContent = await response.Content.ReadAsStringAsync();
             var responseUser = JsonConvert.DeserializeObject<UserSingleResponse>(responseContent).User;
+
+            await IdentityCreator.DeleteIdentity(Endpoints.Users, User);
 
             Assert.Multiple(() =>
             {
                 Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
                     $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
-                Assert.That(responseUser.Id.ToString, Is.EqualTo(user.Id.ToString()),
+                Assert.That(responseUser.Id, Is.EqualTo(User.Id),
                     "Actual Id isnt equal to expected.");
                 Assert.That(responseUser.Name, Is.EqualTo(testData.UserRequest["UserRequest"].Name),
                     "Actual Name isnt equal to expected.");
@@ -41,8 +43,6 @@ namespace Tests.Integration.Tests.CRUD.Users
                 Assert.That(responseUser.Status, Is.EqualTo(testData.UserRequest["UserRequest"].Status),
                     "Actual Status isnt equal to expected.");
             });
-
-            await IdentityCreator.DeleteIdentity(Endpoints.Users, user);
         }
     }
 }

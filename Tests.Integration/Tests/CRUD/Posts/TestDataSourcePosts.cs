@@ -14,7 +14,7 @@ namespace Tests.Integration.Tests.CRUD.Posts
 {
     internal static class TestDataSourcePosts
     {
-        internal static IEnumerable PatchRequestUpdatesPost
+        internal static IEnumerable PatchRequestUpdatesPostTitle
         {
             get
             {
@@ -26,10 +26,10 @@ namespace Tests.Integration.Tests.CRUD.Posts
 
                 data.PostRequest["updatedPostRequest"] = new Post()
                 {
-                    Id = TestServices.Rand,
-                    UserId = TestServices.Rand,
+                    Id = data.PostRequest["initialPostRequest"].Id,
+                    UserId = data.PostRequest["initialPostRequest"].UserId,
                     Title = "Random Post Changed",
-                    Body = "Random Post Changed Body"
+                    Body = data.PostRequest["initialPostRequest"].Body
                 };
 
                 data.StatusCode["StatusCode"] = HttpStatusCode.OK;
@@ -52,7 +52,7 @@ namespace Tests.Integration.Tests.CRUD.Posts
                 yield return new TestCaseData(data).SetArgDisplayNames("ValidRequestShouldReturnNoContent");
             }
         }
-        internal static IEnumerable PutRequestUpdatesPost
+        internal static IEnumerable PutRequestUpdatesPostAllFields
         {
             get
             {

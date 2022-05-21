@@ -14,32 +14,34 @@ namespace Tests.Integration.Tests.CRUD.Users
     public class PatchUsers : TestBase
     {
         [Test]
-        [Ignore("Ignore a test")]
+        //[Ignore("Ignore a test")]
         [Category("Patch")]
-        [TestCaseSource(typeof(TestDataSourceUsers), nameof(TestDataSourceUsers.PatchRequestUpdatesUser))]
-        public async Task PutRequest_UpdateUser_ExpectedUserUpdated(TestData testData)
+        [TestCaseSource(typeof(TestDataSourceUsers), nameof(TestDataSourceUsers.PatchRequestUpdatesUserEmail))]
+        public async Task PatchRequest_UpdatesUserEmail_ExpectedUserUpdated(TestData testData)
         {
-            var user = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["InitialUserRequest"]);
+            var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["initialUserRequest"]);
 
-            var responsePatch = await TestServices.HttpClientFactory
-                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Patch(Endpoints.Users + Endpoints.UserId(user.Id)
-                 + Endpoints.AccessToken, testData.UserRequest["UpdatedUserRequest"].Email);
+            var response = await TestServices.HttpClientFactory
+                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Patch(Endpoints.Users + Endpoints.UserId(User.Id)
+                 + Endpoints.AccessToken, testData.UserRequest["updatedUserRequest"]);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var updatedUser = JsonConvert.DeserializeObject<UserSingleResponse>(responseContent).User;
 
-            var responseGet = await TestServices.HttpClientFactory
-                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + Endpoints.UserId(user.Id)
-                 + Endpoints.AccessToken);
-            var responseGetContent = await responseGet.Content.ReadAsStringAsync();
-            var responseGetUser = JsonConvert.DeserializeObject<UserSingleResponse>(responseGetContent).User;
+            await IdentityCreator.DeleteIdentity(Endpoints.Users, User);
 
             Assert.Multiple(() =>
             {
-                Assert.That(responsePatch.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
+                Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
                     $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
-                Assert.That(responseGetUser.Email, Is.EqualTo(testData.UserRequest["UpdatedUserRequest"].Email),
+                Assert.That(updatedUser.Email, Is.EqualTo(testData.UserRequest["updatedUserRequest"].Email),
                     "Actual Email isnt equal to expected.");
+                Assert.That(updatedUser.Name, Is.EqualTo(testData.UserRequest["updatedUserRequest"].Name),
+                    "Actual Name isnt equal to expected.");
+                Assert.That(updatedUser.Gender, Is.EqualTo(testData.UserRequest["updatedUserRequest"].Gender),
+                    "Actual Gender isnt equal to expected.");
+                Assert.That(updatedUser.Status, Is.EqualTo(testData.UserRequest["updatedUserRequest"].Status),
+                    "Actual Status isnt equal to expected.");
             });
-
-            await IdentityCreator.DeleteIdentity(Endpoints.Users, user);
         }
     }
 }

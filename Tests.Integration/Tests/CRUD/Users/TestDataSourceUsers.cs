@@ -20,7 +20,7 @@ namespace Tests.Integration.Tests.CRUD.Users
             {
                 var data = new TestData();
 
-                data.UserRequest["PostRequest"] = CreateExpectedUserResponse();
+                data.UserRequest["UserRequest"] = CreateExpectedUserResponse();
 
                 data.StatusCode["StatusCode"] = HttpStatusCode.Created;
 
@@ -41,15 +41,15 @@ namespace Tests.Integration.Tests.CRUD.Users
                     .SetArgDisplayNames("ValidRequestShouldReturn200");
             }
         }
-        internal static IEnumerable PutRequestUpdatesUser
+        internal static IEnumerable PutRequestUpdatesUserAllFields
         {
             get
             {
                 var data = new TestData();
 
-                data.UserRequest["InitialUserRequest"] = CreateExpectedUserResponse();
+                data.UserRequest["initialUserRequest"] = CreateExpectedUserResponse();
 
-                data.UserRequest["UpdatedUserRequest"] = CreateExpectedUserResponse();
+                data.UserRequest["updatedUserRequest"] = CreateExpectedUserResponse();
 
                 data.StatusCode["StatusCode"] = HttpStatusCode.OK;
 
@@ -57,16 +57,22 @@ namespace Tests.Integration.Tests.CRUD.Users
                     .SetArgDisplayNames("ValidRequestShouldReturn200");
             }
         }
-        internal static IEnumerable PatchRequestUpdatesUser
+        internal static IEnumerable PatchRequestUpdatesUserEmail
         {
             get
             {
                 var data = new TestData();
 
-                data.UserRequest["InitialUserRequest"] = CreateExpectedUserResponse();
+                data.UserRequest["initialUserRequest"] = CreateExpectedUserResponse();
 
-                data.UserRequest["UpdatedUserRequest"] = CreateExpectedUserResponse();
-                data.UserRequest["UpdatedUserRequest"].Email = TestServices.NewId.ToString() + "@mail.com";
+                data.UserRequest["updatedUserRequest"] = new User()
+                {
+                    Id = data.UserRequest["initialUserRequest"].Id,
+                    Name = data.UserRequest["initialUserRequest"].Name,
+                    Email = "updatedEmail" + "@mail.com",
+                    Gender = data.UserRequest["initialUserRequest"].Gender,
+                    Status = data.UserRequest["initialUserRequest"].Status
+                };
 
                 data.StatusCode["StatusCode"] = HttpStatusCode.OK;
 

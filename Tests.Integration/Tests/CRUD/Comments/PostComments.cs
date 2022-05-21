@@ -17,7 +17,7 @@ namespace Tests.Integration.Tests.CRUD.Comments
     {
         [Test]
         [Category("Post")]
-        [TestCaseSource(typeof(TestDataSourceComments), nameof(TestDataSourceComments.PostCommentRequestReturnsStatusCodeCreated))]
+        [TestCaseSource(typeof(TestDataSourceComments), nameof(TestDataSourceComments.PostRequestReturnsStatusCodeCreated))]
         public async Task PostRequest_PostComment_ExpectedStatusCodeReturned(TestData testData)
         {
             var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
