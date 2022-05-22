@@ -19,12 +19,11 @@ namespace Tests.Common.Configuration.Services.Creators
 {
     public class IdentityCreator
     {
-        private const int _maxRetries = 10;
+        private const int _maxRetries = 3;
         private static AsyncRetryPolicy? retryPolicy;
         public static async Task<IIdentity> CreateIdentity(string endpoint, object payload)
         {
-            retryPolicy = Policy.Handle<HttpRequestException>(ex => (ex.StatusCode == HttpStatusCode.TooManyRequests || 
-                                                                      ex.StatusCode == HttpStatusCode.ServiceUnavailable))
+            retryPolicy = Policy.Handle<HttpRequestException>(ex => ex.StatusCode != HttpStatusCode.Created)
                                 .WaitAndRetryAsync(_maxRetries,
                                 retryAttempt =>
                                 {

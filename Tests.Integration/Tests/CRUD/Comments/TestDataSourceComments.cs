@@ -117,6 +117,19 @@ namespace Tests.Integration.Tests.CRUD.Comments
                 yield return new TestCaseData(data).SetArgDisplayNames("ValidRequestShouldReturn201");
             }
         }
+        internal static IEnumerable PostRequestReturnsStatusCodeUnprocessableEntity
+        {
+            get
+            {
+                var data = new TestData();
+
+                data.CommentRequest["CommentRequest"] = CreateExpectedCommentResponse();
+
+                data.StatusCode["StatusCode"] = HttpStatusCode.UnprocessableEntity;
+
+                yield return new TestCaseData(data).SetArgDisplayNames("ValidRequestShouldReturn422");
+            }
+        }
 
         private static Comment CreateExpectedCommentResponse()
         {

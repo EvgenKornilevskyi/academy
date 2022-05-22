@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
+using Tests.Common.Configuration.Models.Responses;
 using Tests.Common.Configuration.Services.Creators;
 using Tests.Common.Configuration.TestData;
 
@@ -93,7 +94,7 @@ namespace Tests.Integration.Tests.DifficultScenarios
         [Ignore("Ignore a test")]
         [Category("Difficult")]
         [TestCaseSource(typeof(DataSourceDifficultScenarious), nameof(DataSourceDifficultScenarious.Returns21Posts))]
-        public async Task GetRequest_Get21Post_ExpectedPostsReturned21(TestData testData)
+        public async Task GetRequest_Get21Post_ExpectedPostsReturned(TestData testData)
         {
             var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
 
@@ -105,7 +106,7 @@ namespace Tests.Integration.Tests.DifficultScenarios
 
             var response = await TestServices.HttpClientFactory
                  .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Users + Endpoints.UserId(User.Id) + Endpoints.Post
-                 + Endpoints.Page(2) + Endpoints.AccessToken);
+                 + Endpoints.Page(1) + Endpoints.AccessToken);
             var responseContent = await response.Content.ReadAsStringAsync();
             var postFirstFromSecondPage = JsonConvert.DeserializeObject<PostsResponse>(responseContent).Posts.ToList().First();
 
@@ -122,6 +123,53 @@ namespace Tests.Integration.Tests.DifficultScenarios
                 Assert.That(postFirstFromSecondPage, Is.EqualTo(testData.PostRequestList["PostRequestList"].First()),
                     "Actual first post on second page arent equal to expected.");
             });
+        }
+        [Test]
+        [Category("Difficult")]
+        [TestCaseSource(typeof(DataSourceDifficultScenarious), nameof(DataSourceDifficultScenarious.ReturnsUpdatedComment))]
+        public async Task GetRequest_GetUpdatedComment_ExpectedCommentReturned(TestData testData)
+        {
+            var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
+
+            testData.PostRequest["PostRequest"].UserId = User.Id;
+
+            var Post = await IdentityCreator.CreateIdentity(Endpoints.Posts, testData.PostRequest["PostRequest"]);
+
+            testData.CommentRequest["initialCommentRequest"].PostId = Post.Id;
+            testData.CommentRequest["updatedCommentRequest"].PostId = Post.Id;
+
+            var Comment = await IdentityCreator.CreateIdentity(Endpoints.Comments, testData.CommentRequest["initialCommentRequest"]);
+
+            var rsp = await TestServices.HttpClientFactory
+                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Put(Endpoints.Comments + Endpoints.CommentId(Comment.Id)  + Endpoints.AccessToken, 
+                                                                        testData.CommentRequest["updatedCommentRequest"]);
+
+            var response = await TestServices.HttpClientFactory
+                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Get(Endpoints.Posts + Endpoints.PostId(Post.Id) + Endpoints.Comment
+                 + Endpoints.AccessToken);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var updatedComment = JsonConvert.DeserializeObject<CommentsResponse>(responseContent).Comments.FirstOrDefault();
+
+            await IdentityCreator.DeleteIdentity(Endpoints.Users, User);
+            await IdentityCreator.DeleteIdentity(Endpoints.Posts, Post);
+            await IdentityCreator.DeleteIdentity(Endpoints.Comments, Comment);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
+                    $"Actual StatusCode isnt equal to expected. {Endpoints.Comments}");
+                Assert.That(updatedComment.Id, Is.EqualTo(Comment.Id),
+                    "Actual Id isnt equal to expected.");
+                Assert.That(updatedComment.PostId, Is.EqualTo(testData.CommentRequest["updatedCommentRequest"].PostId),
+                    "Actual PostId isnt equal to expected.");
+                Assert.That(updatedComment.Name, Is.EqualTo(testData.CommentRequest["updatedCommentRequest"].Name),
+                    "Actual Name isnt equal to expected.");
+                Assert.That(updatedComment.Email, Is.EqualTo(testData.CommentRequest["updatedCommentRequest"].Email),
+                    "Actual Email isnt equal to expected.");
+                Assert.That(updatedComment.Body, Is.EqualTo(testData.CommentRequest["updatedCommentRequest"].Body),
+                    "Actual Body isnt equal to expected.");
+            });
+
         }
     }
 }

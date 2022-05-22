@@ -41,6 +41,18 @@ namespace Tests.Integration.Tests.CRUD.Comments
             Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
                 $"Actual StatusCode isnt equal to expected. {Endpoints.Comments}");
         }
+        [Test]
+        [Category("Post")]
+        [TestCaseSource(typeof(TestDataSourceComments), nameof(TestDataSourceComments.PostRequestReturnsStatusCodeUnprocessableEntity))]
+        public async Task PostRequest_PostInvalidComment_ExpectedStatusCodeReturned(TestData testData)
+        { 
+            var response = await TestServices.HttpClientFactory
+                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Comments + Endpoints.AccessToken,
+                testData.CommentRequest["CommentRequest"]);
+
+            Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
+                $"Actual StatusCode isnt equal to expected. {Endpoints.Comments}");
+        }
     }
 }
 
