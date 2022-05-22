@@ -14,7 +14,7 @@ namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
 {
     [Test]
     [Category("DeleteCommentWithoutToken")]
-    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeNotFound))]
+    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.DeleteRequestReturnsStatusCodeNotFound))]
     public async Task DeleteRequestWithoutToken(TestData testData)
     {
         var user = await IdentityCreator.CreateIdentity(Endpoints.Users,
@@ -45,7 +45,7 @@ namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
 
     private static class TestDataSourcePost
     {
-        internal static IEnumerable PostRequestReturnsStatusCodeNotFound
+        internal static IEnumerable DeleteRequestReturnsStatusCodeNotFound
         {
             get
             {
@@ -75,7 +75,7 @@ namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
                     
                     CommentRequest =
                     {
-                        ["DeleteRequest"] = new Common.Configuration.Models.Comment()
+                        ["DeleteRequest"] = new Comment()
                         {
                             Body = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",

@@ -10,7 +10,7 @@ using Post = Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken.Post;
 
 namespace Tests.Integration.Tests.CRUD.Negative.Posts;
 
-public class Posts
+public class NonExistent : TestBase
 {
     [Test]
     [Category("GetNonExistentPost")]

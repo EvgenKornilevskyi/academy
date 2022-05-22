@@ -14,7 +14,7 @@ namespace Tests.Integration.Tests.CRUD.Negative.Posts.WithoutToken;
 {
     [Test]
     [Category("PatchPostWithoutToken")]
-    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeNotFound))]
+    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PatchRequestReturnsStatusCodeNotFound))]
     public async Task DeleteRequestWithoutToken(TestData testData)
     {
         var user = await IdentityCreator.CreateIdentity(Endpoints.Users,
@@ -42,7 +42,7 @@ namespace Tests.Integration.Tests.CRUD.Negative.Posts.WithoutToken;
 
     private static class TestDataSourcePost
     {
-        internal static IEnumerable PostRequestReturnsStatusCodeNotFound
+        internal static IEnumerable PatchRequestReturnsStatusCodeNotFound
         {
             get
             {

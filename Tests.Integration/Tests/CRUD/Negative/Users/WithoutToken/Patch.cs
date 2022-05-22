@@ -14,7 +14,7 @@ public class Patch : TestBase
 {
     [Test]
     [Category("PatchUserWithoutToken")]
-    [TestCaseSource(typeof(TestDataSourceDelete), nameof(TestDataSourceDelete.DeleteRequestReturnsStatusNotFound))]
+    [TestCaseSource(typeof(TestDataSourcePatch), nameof(TestDataSourcePatch.PatchRequestReturnsStatusNotFound))]
     public async Task DeleteRequestWithoutToken(TestData testData)
     {
         var user = await IdentityCreator.CreateIdentity(Endpoints.Users, 
@@ -31,9 +31,9 @@ public class Patch : TestBase
         await IdentityCreator.DeleteIdentity(Endpoints.Users, user);
     }
 
-    private static class TestDataSourceDelete
+    private static class TestDataSourcePatch
     {
-        internal static IEnumerable DeleteRequestReturnsStatusNotFound
+        internal static IEnumerable PatchRequestReturnsStatusNotFound
         {
             get
             {

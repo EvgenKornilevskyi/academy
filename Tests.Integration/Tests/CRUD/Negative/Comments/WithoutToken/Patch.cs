@@ -14,7 +14,7 @@ namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
 {
     [Test]
     [Category("PatchCommentWithoutToken")]
-    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeNotFound))]
+    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PatchRequestReturnsStatusCodeNotFound))]
     public async Task PatchRequestWithoutToken(TestData testData)
     {
         var user = await IdentityCreator.CreateIdentity(Endpoints.Users,
@@ -46,7 +46,7 @@ namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
 
     private static class TestDataSourcePost
     {
-        internal static IEnumerable PostRequestReturnsStatusCodeNotFound
+        internal static IEnumerable PatchRequestReturnsStatusCodeNotFound
         {
             get
             {
@@ -76,7 +76,7 @@ namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
                     
                     CommentRequest =
                     {
-                        ["PatchRequest"] = new Common.Configuration.Models.Comment()
+                        ["PatchRequest"] = new Comment()
                         {
                             Body = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",
@@ -84,7 +84,7 @@ namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
                             Name = TestServices.NewId
                         },
                         
-                        ["newPatchRequest"] = new Common.Configuration.Models.Comment()
+                        ["newPatchRequest"] = new Comment()
                         {
                             Body = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",

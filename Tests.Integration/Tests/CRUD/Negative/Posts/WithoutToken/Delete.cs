@@ -14,7 +14,7 @@ public class Delete : TestBase
 {
     [Test]
     [Category("PostPostWithoutToken")]
-    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeNotFound))]
+    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.DeleteRequestReturnsStatusCodeNotFound))]
     public async Task DeleteRequestWithoutToken(TestData testData)
     {
         var user = await IdentityCreator.CreateIdentity(Endpoints.Users,
@@ -40,7 +40,7 @@ public class Delete : TestBase
 
     private static class TestDataSourcePost
     {
-        internal static IEnumerable PostRequestReturnsStatusCodeNotFound
+        internal static IEnumerable DeleteRequestReturnsStatusCodeNotFound
         {
             get
             {

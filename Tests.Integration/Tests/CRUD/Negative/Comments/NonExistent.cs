@@ -8,7 +8,7 @@ using Tests.Common.Configuration.TestData;
 
 namespace Tests.Integration.Tests.CRUD.Negative.Comments;
 
-public class Comment
+public class NonExistent : TestBase
 {
     [Test]
     [Category("GetNonExistentComment")]

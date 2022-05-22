@@ -9,7 +9,7 @@ using Tests.Common.Configuration.TestData;
 
 namespace Tests.Integration.Tests.CRUD.Negative.Users;
 
-public class NonExistent
+public class NonExistent : TestBase
 {
     [Test]
     [Category("GetNonExistentUser")]
