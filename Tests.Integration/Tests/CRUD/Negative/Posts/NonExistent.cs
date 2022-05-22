@@ -6,14 +6,15 @@ using ResultsManager.Tests.Common.Helpers;
 using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.TestData;
+using Post = Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken.Post;
 
-namespace Tests.Integration.Tests.CRUD.Negative.NonExistent;
+namespace Tests.Integration.Tests.CRUD.Negative.Posts;
 
 public class Posts
 {
     [Test]
     [Category("GetNonExistentPost")]
-    [TestCaseSource(typeof(TestDataSourceGet), nameof(TestDataSourceGet.GetRequestReturnsPost))]
+    [TestCaseSource(typeof(TestDataSourceGet), nameof(TestDataSourceGet.GetRequestReturnsStatusCodeNotFound))]
     
     public async Task GetNonExistentPost(TestData testData)
     {
@@ -25,7 +26,7 @@ public class Posts
                                                                   Endpoints.AccessToken);
 
         Assert.That(responseGet.StatusCode, Is.EqualTo(testData.StatusCode["NotFound"]),
-            $"Actual StatusCode isn't equal to expected. {Endpoints.Users}");
+            $"Actual StatusCode isn't equal to expected. {Endpoints.Posts}");
 
         await TestServices.HttpClientFactory.
             SendHttpRequestTo(HttpApisNames.Jsonplaceholder).
@@ -33,22 +34,29 @@ public class Posts
                    Endpoints.UserId(responsePostId) + Endpoints.AccessToken);
     }
 
-    internal static class TestDataSourceGet
+    private static class TestDataSourceGet
     {
-        internal static IEnumerable GetRequestReturnsPost
+        internal static IEnumerable GetRequestReturnsStatusCodeNotFound
         {
             get
             {
-                var data = new TestData();
-
-                data.PostRequest["GetRequest"] = new Post();
-
-                data.PostRequest["GetRequest"].Id = Convert.ToInt32(-1);
-
-                data.StatusCode["NotFound"] = HttpStatusCode.NotFound;
+                var data = new TestData
+                {
+                    PostRequest =
+                    {
+                        ["GetRequest"] = new Common.Configuration.Models.Post
+                        {
+                            Id = Convert.ToInt32(-1)
+                        }
+                    },
+                    StatusCode =
+                    {
+                        ["NotFound"] = HttpStatusCode.NotFound
+                    }
+                };
 
                 yield return new TestCaseData(data)
-                    .SetArgDisplayNames("ReturnsPostById");
+                    .SetArgDisplayNames("NotFoundReturn404");
             }
         }
     }

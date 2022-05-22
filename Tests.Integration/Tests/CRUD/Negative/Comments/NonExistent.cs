@@ -4,16 +4,15 @@ using NUnit.Framework;
 using ResultsManager.Tests.Common.Configuration.Services.Http;
 using ResultsManager.Tests.Common.Helpers;
 using Tests.Common.Configuration;
-using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.TestData;
 
-namespace Tests.Integration.Tests.CRUD.Negative.NonExistent;
+namespace Tests.Integration.Tests.CRUD.Negative.Comments;
 
 public class Comment
 {
     [Test]
     [Category("GetNonExistentComment")]
-    [TestCaseSource(typeof(TestDataSourceGet), nameof(TestDataSourceGet.GetRequestReturnsComment))]
+    [TestCaseSource(typeof(TestDataSourceGet), nameof(TestDataSourceGet.GetRequestReturnsStatusCodeNotFound))]
     
     public async Task GetNonExistentComment(TestData testData)
     {
@@ -25,7 +24,7 @@ public class Comment
                                                                   Endpoints.AccessToken);
 
         Assert.That(responseGet.StatusCode, Is.EqualTo(testData.StatusCode["NotFound"]),
-            $"Actual StatusCode isn't equal to expected. {Endpoints.Users}");
+            $"Actual StatusCode isn't equal to expected. {Endpoints.Comments}");
 
         await TestServices.HttpClientFactory.
             SendHttpRequestTo(HttpApisNames.Jsonplaceholder).
@@ -33,22 +32,29 @@ public class Comment
                    Endpoints.UserId(responseCommentId) + Endpoints.AccessToken);
     }
 
-    internal static class TestDataSourceGet
+    private static class TestDataSourceGet
     {
-        internal static IEnumerable GetRequestReturnsComment
+        internal static IEnumerable GetRequestReturnsStatusCodeNotFound
         {
             get
             {
-                var data = new TestData();
-
-                data.CommentRequest["GetRequest"] = new Common.Configuration.Models.Comment();
-
-                data.CommentRequest["GetRequest"].Id = Convert.ToInt32(-1);
-
-                data.StatusCode["NotFound"] = HttpStatusCode.NotFound;
+                var data = new TestData
+                {
+                    CommentRequest =
+                    {
+                        ["GetRequest"] = new Common.Configuration.Models.Comment
+                        {
+                            Id = Convert.ToInt32(-1)
+                        }
+                    },
+                    StatusCode =
+                    {
+                        ["NotFound"] = HttpStatusCode.NotFound
+                    }
+                };
 
                 yield return new TestCaseData(data)
-                    .SetArgDisplayNames("ReturnsCommentById");
+                    .SetArgDisplayNames("NotFoundReturn404");
             }
         }
     }
