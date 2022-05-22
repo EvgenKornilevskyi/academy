@@ -105,6 +105,19 @@ namespace Tests.Integration.Tests.CRUD.Posts
                 yield return new TestCaseData(data).SetArgDisplayNames("ValidRequestShouldReturn201");
             }
         }
+        internal static IEnumerable PostRequestReturnsStatusCodeUnprocessableEntity
+        {
+            get
+            {
+                var data = new TestData();
+
+                data.PostRequest["PostRequest"] = CreateExpectedPostResponse();
+
+                data.StatusCode["StatusCode"] = HttpStatusCode.UnprocessableEntity;
+
+                yield return new TestCaseData(data).SetArgDisplayNames("ValidRequestShouldReturn422");
+            }
+        }
         private static Post CreateExpectedPostResponse()
         {
             var expectedPost = new Post()

@@ -71,6 +71,40 @@ namespace Tests.Integration.Tests.DifficultScenarios
                     .SetArgDisplayNames("ReturnsThreePosts");
             }
         }
+        internal static IEnumerable ReturnsUpdatedComment
+        {
+            get
+            {
+                var data = new TestData();
+
+                data.UserRequest["UserRequest"] = CreateExpectedUserResponse();
+
+                data.PostRequest["PostRequest"] = CreateExpectedPostResponse();
+
+                data.CommentRequest["initialCommentRequest"] = new Comment()
+                {
+                    Id = 1,
+                    PostId = 1,
+                    Name = data.UserRequest["UserRequest"].Name,
+                    Email = data.UserRequest["UserRequest"].Email,
+                    Body = "intitial random comment"
+                };
+
+                data.CommentRequest["updatedCommentRequest"] = new Comment()
+                {
+                    Id = 1,
+                    PostId = 1,
+                    Name = data.UserRequest["UserRequest"].Name,
+                    Email = data.UserRequest["UserRequest"].Email,
+                    Body = "updated random comment"
+                };
+
+                data.StatusCode["StatusCode"] = HttpStatusCode.OK;
+
+                yield return new TestCaseData(data)
+                    .SetArgDisplayNames("ReturnsThreePosts");
+            }
+        }
         private static List<Comment> CreateExpectedThreeCommentResponse()
         {
             var expectedComments = new List<Comment>();
@@ -109,6 +143,18 @@ namespace Tests.Integration.Tests.DifficultScenarios
                 Body = "Random Post Body"
             };
             return expectedPost;
+        }
+        private static Comment CreateExpectedCommentResponse()
+        {
+            var expectedComment = new Comment()
+            {
+                Id = TestServices.Rand,
+                PostId = TestServices.Rand,
+                Name = TestServices.NewId,
+                Email = TestServices.NewId + "@mail.com",
+                Body = "Random Comment Body"
+            };
+            return expectedComment;
         }
     }
 }

@@ -36,6 +36,18 @@ namespace Tests.Integration.Tests.CRUD.Posts
             Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
                 $"Actual StatusCode isnt equal to expected. {Endpoints.Posts}");
         }
+        [Test]
+        [Category("Post")]
+        [TestCaseSource(typeof(TestDataSourcePosts), nameof(TestDataSourcePosts.PostRequestReturnsStatusCodeUnprocessableEntity))]
+        public async Task PostRequest_PostInvalidPost_ExpectedStatusCodeReturned(TestData testData)
+        {
+            var response = await TestServices.HttpClientFactory
+                .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Posts + Endpoints.AccessToken,
+                testData.PostRequest["PostRequest"]);
+
+            Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
+                $"Actual StatusCode isnt equal to expected. {Endpoints.Posts}");
+        }
     }
 }
 
