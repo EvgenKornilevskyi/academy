@@ -53,8 +53,8 @@ _ЗАДАНИЕ_
 _ФУНКЦИОНАЛ_
 
 Одним из вариантов запуска тестов есть консольная команда _dotnet test_. Откройте PowerShell в папке с .sln файлом проекта и выполните эту команду.
-Существует несколько категорий тестов [Post, Get, Put, Patch, Delete, Difficult, ...]. Чтобы запустить тесты конкретной категории выполните команду _dotnet test --filter TestCategory=ConcreteCategory__, _ConcreteCategory_ желанная категория тестов.
+Существует несколько категорий тестов [Post, Get, Put, Patch, Delete, Difficult, ...]. Чтобы запустить тесты конкретной категории выполните команду dotnet test --filter TestCategory=ConcreteCategory, _ConcreteCategory_ желанная категория тестов.
 
 
-Результаты тестов сохраняются в файле _TestResultsDateTime.json по относительному пути ..\Tests.Integration\bin\Debug\net6.0
+Результаты тестов сохраняются в файле TestResultsDateTime.json по относительному пути ..\Tests.Integration\bin\Debug\net6.0
 
