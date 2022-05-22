@@ -30,7 +30,7 @@ namespace Tests.Integration.Tests.CRUD.Posts
                 .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Delete(Endpoints.Posts + Endpoints.PostId(Post.Id) + Endpoints.AccessToken);
 
             await IdentityCreator.DeleteIdentity(Endpoints.Users, User);
-
+            
             Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
                 $"Actual StatusCode isnt equal to expected. {Endpoints.Users}");
         }
