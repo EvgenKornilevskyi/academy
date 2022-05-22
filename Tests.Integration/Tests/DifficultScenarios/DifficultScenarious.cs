@@ -93,7 +93,7 @@ namespace Tests.Integration.Tests.DifficultScenarios
         [Ignore("Ignore a test")]
         [Category("Difficult")]
         [TestCaseSource(typeof(DataSourceDifficultScenarious), nameof(DataSourceDifficultScenarious.Returns21Posts))]
-        public async Task GetRequest_Get21Post_ExpectedPostsReturned(TestData testData)
+        public async Task GetRequest_Get21Post_ExpectedPostsReturned21(TestData testData)
         {
             var User = await IdentityCreator.CreateIdentity(Endpoints.Users, testData.UserRequest["UserRequest"]);
 
