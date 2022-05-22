@@ -50,7 +50,6 @@ public class Delete : TestBase
                     {
                         ["DeleteRequest"] = new User
                         {
-                            Id = TestServices.Rand,
                             Name = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",
                             Gender = "male",
@@ -63,7 +62,6 @@ public class Delete : TestBase
                         ["DeleteRequest"] = new Common.Configuration.Models.Post
                         {
                             Body = TestServices.NewId,
-                            Id = 2,
                             Title = TestServices.NewId
                         }
                     },

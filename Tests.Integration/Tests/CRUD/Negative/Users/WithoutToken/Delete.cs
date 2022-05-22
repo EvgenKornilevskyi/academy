@@ -42,7 +42,6 @@ public class Delete : TestBase
                     {
                         ["DeleteRequest"] = new User
                         {
-                            Id = TestServices.Rand,
                             Name = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",
                             Gender = "male",

@@ -8,14 +8,14 @@ using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.Services.Creators;
 using Tests.Common.Configuration.TestData;
 
-namespace Tests.Integration.Tests.CRUD.Negative.Posts.WithoutToken;
+namespace Tests.Integration.Tests.CRUD.Negative.Posts.InvalidJson;
 
-public class Post : TestBase
+public class InvalidTitle : TestBase
 {
     [Test]
-    [Category("PostPostWithoutToken")]
-    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeUnauthorized))]
-    public async Task PostRequestWithoutToken(TestData testData)
+    [Category("PostPostInvalidTitle")]
+    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeUnprocessableEntity))]
+    public async Task PostPostInvalidTitle(TestData testData)
     {
         var user = await IdentityCreator.CreateIdentity(Endpoints.Users,
             testData.UserRequest["PostRequest"]);
@@ -23,19 +23,19 @@ public class Post : TestBase
         testData.PostRequest["PostRequest"].UserId = user.Id;
 
         var response = await TestServices.HttpClientFactory
-            .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Posts,
+            .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Posts + Endpoints.AccessToken,
                 testData.PostRequest["PostRequest"]);
-
-        await IdentityCreator.DeleteIdentity(Endpoints.Users, user);
 
         Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
             $"Actual StatusCode isn't equal to expected. {Endpoints.Posts}");
+        
+        await IdentityCreator.DeleteIdentity(Endpoints.Users, user);
     }
 
 
     private static class TestDataSourcePost
     {
-        internal static IEnumerable PostRequestReturnsStatusCodeUnauthorized
+        internal static IEnumerable PostRequestReturnsStatusCodeUnprocessableEntity
         {
             get
             {
@@ -51,23 +51,23 @@ public class Post : TestBase
                             Status = "active"
                         }
                     },
-
+                    
                     PostRequest =
                     {
-                        ["PostRequest"] = new Common.Configuration.Models.Post
+                        ["PostRequest"] = new Post
                         {
                             Body = TestServices.NewId,
-                            Title = TestServices.NewId
+                            Title = "",
                         }
                     },
 
                     StatusCode =
                     {
-                        ["StatusCode"] = HttpStatusCode.Unauthorized
+                        ["StatusCode"] = HttpStatusCode.UnprocessableEntity
                     }
                 };
 
-                yield return new TestCaseData(data).SetArgDisplayNames("UnauthorizedReturn401");
+                yield return new TestCaseData(data).SetArgDisplayNames("UnprocessableEntity422");
             }
         }
     }

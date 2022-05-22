@@ -52,7 +52,6 @@ namespace Tests.Integration.Tests.CRUD.Negative.Posts.WithoutToken;
                     {
                         ["PatchRequest"] = new User
                         {
-                            Id = TestServices.Rand,
                             Name = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",
                             Gender = "male",
@@ -65,13 +64,11 @@ namespace Tests.Integration.Tests.CRUD.Negative.Posts.WithoutToken;
                         ["PatchRequest"] = new Common.Configuration.Models.Post
                         {
                             Body = TestServices.NewId,
-                            Id = 2,
                             Title = TestServices.NewId
                         },
                         
                         ["newPatchRequest"] = new Common.Configuration.Models.Post()
                         {
-                            Id = TestServices.Rand,
                             Title = "Random Post Changed",
                             Body = "Random Post Changed Body"
                         }

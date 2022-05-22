@@ -8,14 +8,14 @@ using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.Services.Creators;
 using Tests.Common.Configuration.TestData;
 
-namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
+namespace Tests.Integration.Tests.CRUD.Negative.Comments.InvalidJson;
 
-public class Post : TestBase
+public class InvalidName
 {
     [Test]
-    [Category("PostCommentWithoutToken")]
-    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeUnauthorized))]
-    public async Task PostRequestWithoutToken(TestData testData)
+    [Category("PostCommentInvalidName")]
+    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeUnprocessableEntity))]
+    public async Task PostRequestInvalidName(TestData testData)
     {
         var user = await IdentityCreator.CreateIdentity(Endpoints.Users,
             testData.UserRequest["PostRequest"]);
@@ -28,11 +28,11 @@ public class Post : TestBase
         testData.CommentRequest["PostRequest"].PostId = post.Id;
         
         var comment  = await TestServices.HttpClientFactory
-            .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Comments,
+            .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Comments + Endpoints.AccessToken,
                 testData.CommentRequest["PostRequest"]);
 
         Assert.That(comment.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
-            $"Actual StatusCode isn't equal to expected. {Endpoints.Posts}");
+            $"Actual StatusCode isn't equal to expected. {Endpoints.Comments}");
         
         await IdentityCreator.DeleteIdentity(Endpoints.Users, user);
         await IdentityCreator.DeleteIdentity(Endpoints.Posts, post);
@@ -41,7 +41,7 @@ public class Post : TestBase
 
     private static class TestDataSourcePost
     {
-        internal static IEnumerable PostRequestReturnsStatusCodeUnauthorized
+        internal static IEnumerable PostRequestReturnsStatusCodeUnprocessableEntity
         {
             get
             {
@@ -60,7 +60,7 @@ public class Post : TestBase
 
                     PostRequest =
                     {
-                        ["PostRequest"] = new Common.Configuration.Models.Post
+                        ["PostRequest"] = new Post
                         {
                             Body = TestServices.NewId,
                             Title = TestServices.NewId
@@ -69,21 +69,21 @@ public class Post : TestBase
                     
                     CommentRequest =
                     {
-                        ["PostRequest"] = new Common.Configuration.Models.Comment()
+                        ["PostRequest"] = new Comment()
                         {
                             Body = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",
-                            Name = TestServices.NewId,
+                            Name = "",
                         }
                     },
 
                     StatusCode =
                     {
-                        ["StatusCode"] = HttpStatusCode.Unauthorized
+                        ["StatusCode"] = HttpStatusCode.UnprocessableEntity
                     }
                 };
 
-                yield return new TestCaseData(data).SetArgDisplayNames("UnauthorizedReturn404");
+                yield return new TestCaseData(data).SetArgDisplayNames("UnprocessableEntity422");
             }
         }
     }

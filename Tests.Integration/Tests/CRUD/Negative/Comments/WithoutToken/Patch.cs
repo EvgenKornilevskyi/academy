@@ -56,7 +56,6 @@ namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
                     {
                         ["PatchRequest"] = new User
                         {
-                            Id = TestServices.Rand,
                             Name = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",
                             Gender = "male",
@@ -69,7 +68,6 @@ namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
                         ["PatchRequest"] = new Common.Configuration.Models.Post
                         {
                             Body = TestServices.NewId,
-                            Id = 2,
                             Title = TestServices.NewId
                         },
                     },
@@ -80,7 +78,6 @@ namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
                         {
                             Body = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",
-                            Id = TestServices.Rand,
                             Name = TestServices.NewId
                         },
                         
@@ -88,7 +85,6 @@ namespace Tests.Integration.Tests.CRUD.Negative.Comments.WithoutToken;
                         {
                             Body = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",
-                            Id = TestServices.Rand,
                             Name = "New Name"
                         }
                     },

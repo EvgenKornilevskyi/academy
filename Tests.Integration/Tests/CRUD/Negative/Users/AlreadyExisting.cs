@@ -4,12 +4,6 @@ using NUnit.Framework;
 using ResultsManager.Tests.Common.Configuration.Services.Http;
 using ResultsManager.Tests.Common.Helpers;
 using Tests.Common.Configuration;
-using System.Collections;
-using System.Net;
-using NUnit.Framework;
-using ResultsManager.Tests.Common.Configuration.Services.Http;
-using ResultsManager.Tests.Common.Helpers;
-using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.Services.Creators;
 using Tests.Common.Configuration.TestData;
@@ -51,8 +45,6 @@ public class AlreadyExisting : TestBase
                         {
                             ["PostRequest"] = new User
                             {
-                                
-                                Id = TestServices.Rand,
                                 Name = TestServices.NewId,
                                 Email = TestServices.NewId + "@mail.com",
                                 Gender = "male",

@@ -43,7 +43,6 @@ public class Patch : TestBase
                     {
                         ["PatchRequest"] = new User
                         {
-                            Id = TestServices.Rand,
                             Name = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",
                             Gender = "male",
@@ -52,7 +51,6 @@ public class Patch : TestBase
                         
                         ["newPatchRequest"] = new User()
                         {
-                            Id = TestServices.Rand,
                             Name = TestServices.NewId,
                             Email = TestServices.NewId + "@mail.com",
                             Gender = "female",

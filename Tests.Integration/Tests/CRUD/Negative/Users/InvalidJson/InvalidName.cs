@@ -7,17 +7,17 @@ using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.TestData;
 
-namespace Tests.Integration.Tests.CRUD.Negative.Users.WithoutToken;
+namespace Tests.Integration.Tests.CRUD.Negative.Users.InvalidJson;
 
-public class Post : TestBase
+public class InvalidName
 {
     [Test]
-    [Category("PostUserWithoutToken")]
-    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeUnauthorized))]
-    public async Task PostRequestWithoutToken(TestData testData)
+    [Category("PostUserInvalidName")]
+    [TestCaseSource(typeof(TestDataSourcePost), nameof(TestDataSourcePost.PostRequestReturnsStatusCodeUnprocessableEntity))]
+    public async Task PostUserInvalidName(TestData testData)
     {
         var response = await TestServices.HttpClientFactory
-            .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Users,
+            .SendHttpRequestTo(HttpApisNames.Jsonplaceholder).Post(Endpoints.Users + Endpoints.AccessToken,
                 testData.UserRequest["PostRequest"]);
 
         Assert.That(response.StatusCode, Is.EqualTo(testData.StatusCode["StatusCode"]),
@@ -26,7 +26,7 @@ public class Post : TestBase
 
     private static class TestDataSourcePost
     {
-        internal static IEnumerable PostRequestReturnsStatusCodeUnauthorized
+        internal static IEnumerable PostRequestReturnsStatusCodeUnprocessableEntity
         {
             get
             {
@@ -36,7 +36,7 @@ public class Post : TestBase
                     {
                         ["PostRequest"] = new User
                         {
-                            Name = TestServices.NewId,
+                            Name = "",
                             Email = TestServices.NewId + "@mail.com",
                             Gender = "male",
                             Status = "active"
@@ -44,11 +44,11 @@ public class Post : TestBase
                     },
                     StatusCode =
                     {
-                        ["StatusCode"] = HttpStatusCode.Unauthorized
+                        ["StatusCode"] = HttpStatusCode.UnprocessableEntity
                     }
                 };
 
-                yield return new TestCaseData(data).SetArgDisplayNames("UnauthorizedReturn401");
+                yield return new TestCaseData(data).SetArgDisplayNames("UnprocessableEntity422");
             }
         }
     }
