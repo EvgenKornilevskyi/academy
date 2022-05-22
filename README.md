@@ -56,5 +56,5 @@ _ФУНКЦИОНАЛ_
 Существует несколько категорий тестов [Post, Get, Put, Patch, Delete, Difficult, ...]. Чтобы запустить тесты конкретной категории выполните команду _dotnet test --filter TestCategory=ConcreteCategory__, _ConcreteCategory_ желанная категория тестов.
 
 
-Результаты тестов сохраняются в файле _TestResults-<DateTime>.json_ по относительному пути ..\Tests.Integration\bin\Debug\net6.0
+Результаты тестов сохраняются в файле _TestResultsDateTime.json по относительному пути ..\Tests.Integration\bin\Debug\net6.0
 
