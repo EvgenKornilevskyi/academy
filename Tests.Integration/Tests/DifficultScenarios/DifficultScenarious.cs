@@ -2,11 +2,7 @@
 using NUnit.Framework;
 using ResultsManager.Tests.Common.Configuration.Services.Http;
 using ResultsManager.Tests.Common.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.Models.Responses;
@@ -169,7 +165,32 @@ namespace Tests.Integration.Tests.DifficultScenarios
                 Assert.That(updatedComment.Body, Is.EqualTo(testData.CommentRequest["updatedCommentRequest"].Body),
                     "Actual Body isnt equal to expected.");
             });
+        }
 
+        [Test]
+        [Category("Difficult")]
+        [TestCaseSource(typeof(DataSourceDifficultScenarious), nameof(DataSourceDifficultScenarious.ReturnsNonExistentPost))]
+        public async Task Get_CommentOfNonExistentPost_CurrentNull(TestData testData)
+        {
+            var post = testData.PostRequest["PostRequest"];
+
+            //Arrange
+            var response = await TestServices.HttpClientFactory.SendHttpRequestTo(HttpApisNames.Jsonplaceholder)
+                .Get($"{Endpoints.Posts}/{post.Id}{Endpoints.Comment}");
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var entities = JsonConvert.DeserializeObject<CommentsResponse>(responseBody);
+
+            //Act
+            var actualMetaCurrent = entities.Meta.Pagination.Links.Current;
+
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK),
+                    $"Actual StatusCode isn't equal to expected.");
+                Assert.That(actualMetaCurrent, Is.Null,
+                    "Actual Meta Current parameter is not null.");
+            });
         }
     }
 }

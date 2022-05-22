@@ -53,6 +53,25 @@ namespace Tests.Integration.Tests.DifficultScenarios
                     .SetArgDisplayNames("ReturnsThreePosts");
             }
         }
+        internal static IEnumerable ReturnsNonExistentPost
+        {
+            get
+            {
+                var data = new TestData();
+
+
+                data.PostRequest["PostRequest"] = new Post()
+                {
+                    Id = 9999,
+                    Body = string.Empty,
+                    Title = string.Empty,
+                    UserId = 1
+                };
+
+                yield return new TestCaseData(data)
+                    .SetArgDisplayNames("ReturnsThreePosts");
+            }
+        }
         internal static IEnumerable ReturnsThreeComments
         {
             get

@@ -3,12 +3,13 @@ using NUnit.Framework;
 using ResultsManager.Tests.Common.Configuration.Services.Http;
 using ResultsManager.Tests.Common.Helpers;
 using System.Collections;
+using System.Net;
 using Tests.Common.Configuration;
 using Tests.Common.Configuration.Models;
 using Tests.Common.Configuration.Models.Responses;
 using Tests.Common.Configuration.TestData;
 
-namespace Tests.Integration.Tests
+namespace Tests.Integration.Tests.Pagination
 {
     [TestFixture]
     public class PagintaionTests : TestBase
@@ -30,10 +31,16 @@ namespace Tests.Integration.Tests
             var actualPage = entities?.Meta?.Pagination.Page;
 
             //Assert
-            Assert.AreEqual(expectedPage, actualPage);
-            //dotnet test --filter TestCategory = Pagination
+            Assert.Multiple(() =>
+            {
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK),
+                    $"Actual StatusCode isn't equal to expected.");
+                Assert.That(actualPage, Is.EqualTo(expectedPage),
+                    $"Actual Page isn't equal to expected.");
+            });
         }
 
+        [Test]
         [Category("Pagination")]
         public async Task Get_LimitPosts_Returns20Posts()
         {
@@ -48,9 +55,16 @@ namespace Tests.Integration.Tests
             var expectedPostsCount = entities.Posts.Count;
 
             //Assert
-            Assert.LessOrEqual(actualLimit, expectedPostsCount);
+            Assert.Multiple(() =>
+            {
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK),
+                    $"Actual StatusCode isn't equal to expected.");
+                Assert.That(actualLimit, Is.LessThanOrEqualTo(expectedPostsCount),
+                    $"Actual Limit isn't equal to expected.");
+            });
         }
 
+        [Test]
         [Category("Pagination")]
         public async Task Get_LimitUsers_Returns20Users()
         {
@@ -65,9 +79,16 @@ namespace Tests.Integration.Tests
             var expectedUsersCount = entities.Users.Count;
 
             //Assert
-            Assert.LessOrEqual(expectedUsersCount, actualLimit);
+            Assert.Multiple(() =>
+            {
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK),
+                    $"Actual StatusCode isn't equal to expected.");
+                Assert.That(actualLimit, Is.LessThanOrEqualTo(expectedUsersCount),
+                    $"Actual Limit isn't equal to expected.");
+            });
         }
 
+        [Test]
         [Category("Pagination")]
         public async Task Get_LimitComments_Returns20Comments()
         {
@@ -82,7 +103,13 @@ namespace Tests.Integration.Tests
             var expectedCommentsCount = entities.Comments.Count;
 
             //Assert
-            Assert.LessOrEqual(expectedCommentsCount, actualLimit);
+            Assert.Multiple(() =>
+            {
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK),
+                    $"Actual StatusCode isn't equal to expected.");
+                Assert.That(actualLimit, Is.LessThanOrEqualTo(expectedCommentsCount),
+                    $"Actual Limit isn't equal to expected.");
+            });
         }
 
         internal static class TestDataSource
@@ -93,19 +120,19 @@ namespace Tests.Integration.Tests
                 {
                     var postsData = new TestData();
 
-                    postsData.Pagination["Pagination"] = new Pagination();
+                    postsData.Pagination["Pagination"] = new Common.Configuration.Models.Pagination();
                     postsData.Pagination["Pagination"].Page = 1;
                     postsData.Strings["Endpoint"] = Endpoints.Posts;
 
                     var commentsData = new TestData();
 
-                    commentsData.Pagination["Pagination"] = new Pagination();
+                    commentsData.Pagination["Pagination"] = new Common.Configuration.Models.Pagination();
                     commentsData.Pagination["Pagination"].Page = 1;
                     commentsData.Strings["Endpoint"] = Endpoints.Comments;
                     
                     var usersData = new TestData();
 
-                    usersData.Pagination["Pagination"] = new Pagination();
+                    usersData.Pagination["Pagination"] = new Common.Configuration.Models.Pagination();
                     usersData.Pagination["Pagination"].Page = 1;
                     usersData.Strings["Endpoint"] = Endpoints.Users;
 
