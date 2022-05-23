@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Project 2
 =======
 **Project 2**
@@ -53,3 +52,7 @@ _ЗАДАНИЕ_
 
 4. Сложные сценарии тестов - придумать и реализовать тестовые кейсы для вложенных ресурсов: https://gorest.co.in/public/v2/users/<userId>/posts и https://gorest.co.in/public/v2/posts/<postId>/comments
 
+ФУНКЦИОНАЛ
+Одним из вариантов запуска тестов есть консольная команда dotnet test. Откройте PowerShell в папке с .sln файлом проекта и выполните эту команду.
+Существует несколько категорий тестов [Post, Get, Put, Patch, Delete, Difficult, ...]. Чтобы запустить тесты конкретной категории выполните команду dotnet test --filter TestCategory=ConcreteCategory, ConcreteCategory желанная категория тестов.
+Результаты тестов сохраняются в файле TestResultsDateTime.json по относительному пути ..\Tests.Integration\bin\Debug\net6.0
